@@ -1,0 +1,29 @@
+{
+  "fuente": "Manual de Identidad Visual Gobernación de Antioquia (Decreto 2024070002993 de 2024; versión web 2026)",
+  "nota_rgb": "RGB recalculado desde HEX; el manual trae RGB inconsistentes para los verdes primarios",
+  "colores": {
+    "verde": {"hex": "#018D38", "rgb": [1, 141, 56], "cmyk": [85, 16, 100, 5], "rol": "primario"},
+    "verde_oscuro": {"hex": "#0B5640", "rgb": [11, 86, 64], "cmyk": [89, 38, 75, 40], "rol": "primario"},
+    "blanco": {"hex": "#FFFFFF", "rgb": [255, 255, 255], "cmyk": [0, 0, 0, 0], "rol": "primario"},
+    "menta": {"hex": "#3AF9A2", "rgb": [58, 249, 162], "cmyk": null, "rol": "primario_solo_digital"},
+    "azul": {"hex": "#3561AB", "rgb": [53, 97, 171], "cmyk": [85, 61, 0, 0], "rol": "secundario"},
+    "azul_claro": {"hex": "#8FCAF0", "rgb": [143, 202, 240], "cmyk": [47, 7, 0, 0], "rol": "secundario"},
+    "naranja": {"hex": "#F28E18", "rgb": [242, 142, 24], "cmyk": [0, 52, 94, 0], "rol": "secundario"},
+    "morado": {"hex": "#8B4A97", "rgb": [139, 74, 151], "cmyk": [55, 80, 0, 0], "rol": "secundario"},
+    "dorado": {"hex": "#B0942B", "rgb": [176, 148, 43], "cmyk": [29, 33, 91, 14], "rol": "secundario"},
+    "verde_bandera": {"hex": "#05662F", "rgb": [5, 102, 47], "cmyk": [90, 33, 100, 26], "rol": "bandera"}
+  },
+  "series_graficos": ["#018D38", "#3561AB", "#F28E18", "#8B4A97", "#B0942B", "#8FCAF0", "#0B5640"],
+  "texto": {"principal": "#1F2933", "secundario": "#52606D", "gris_linea": "#D9DEE3", "fondo_suave": "#F2F7F4"},
+  "tipografia": {
+    "piezas": {"familia": "Poppins", "pesos": ["Regular", "Bold"], "respaldo": "Arial"},
+    "documentos": {"familia": "Arial", "tamano_pt": 12},
+    "escudo": {"familia": "Swiss 721 BT", "uso": "solo dentro del escudo oficial"}
+  },
+  "escudo": {
+    "minimo_impreso_cm_ancho": 3.5,
+    "minimo_pantalla_px": [150, 67],
+    "posicion": "inferior derecha o centrado; derecha en cobranding",
+    "archivos": "assets/escudo/ (solo archivos oficiales)"
+  }
+}

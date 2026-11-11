@@ -1,0 +1,28 @@
+/* Tokens de marca — Gobernación de Antioquia. Fuente: Manual de Identidad Visual (2024/2026). */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+  --ga-verde: #018D38;
+  --ga-verde-oscuro: #0B5640;
+  --ga-blanco: #FFFFFF;
+  --ga-menta: #3AF9A2;        /* solo digital, solo acentos */
+  --ga-azul: #3561AB;
+  --ga-azul-claro: #8FCAF0;
+  --ga-naranja: #F28E18;
+  --ga-morado: #8B4A97;
+  --ga-dorado: #B0942B;
+  --ga-verde-bandera: #05662F;
+
+  --ga-texto: #1F2933;
+  --ga-texto-2: #52606D;
+  --ga-linea: #D9DEE3;
+  --ga-fondo-suave: #F2F7F4;
+
+  --ga-fuente: 'Poppins', Arial, sans-serif;
+  --ga-fuente-doc: Arial, sans-serif;
+}
+
+body { font-family: var(--ga-fuente); color: var(--ga-texto); }
+h1, h2, h3 { font-weight: 700; color: var(--ga-verde-oscuro); }
+.ga-banda { background: var(--ga-verde-oscuro); color: var(--ga-blanco); }
+.ga-acento { border-left: 6px solid var(--ga-verde); padding-left: 12px; }

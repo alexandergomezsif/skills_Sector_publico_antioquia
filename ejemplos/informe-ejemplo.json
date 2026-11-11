@@ -1,0 +1,53 @@
+{
+  "dependencia": "Secretaría de [COMPLETAR: dependencia]",
+  "titulo": "Informe de supervisión del contrato [COMPLETAR: número]",
+  "subtitulo": "Informe parcial No. [COMPLETAR]",
+  "periodo": "[COMPLETAR: fecha inicial] a [COMPLETAR: fecha final]",
+  "fecha_corte": "[COMPLETAR]",
+  "fecha": "[COMPLETAR: fecha de elaboración]",
+  "clasificacion": "Información pública (Ley 1712 de 2014)",
+  "portada": false,
+  "bloques": [
+    {"tipo": "h1", "texto": "1. Resumen"},
+    {"tipo": "p", "texto": "En el periodo, el contratista cumplió **[COMPLETAR] de [COMPLETAR]** obligaciones específicas. La ejecución financiera acumulada es de **[COMPLETAR] %**. El supervisor recomienda [COMPLETAR: aprobar el pago / requerir al contratista]."},
+    {"tipo": "kpis", "items": [
+      {"valor": "[ ] %", "etiqueta": "Ejecución física"},
+      {"valor": "[ ] %", "etiqueta": "Ejecución financiera"},
+      {"valor": "[ ] días", "etiqueta": "Plazo restante"}
+    ]},
+    {"tipo": "h1", "texto": "2. Identificación del contrato"},
+    {"tipo": "tabla", "encabezados": ["Campo", "Información"], "anchos_cm": [5.5, 11],
+     "filas": [
+      ["Número de contrato", "[COMPLETAR]"],
+      ["Proceso SECOP II", "[COMPLETAR]"],
+      ["Objeto", "[COMPLETAR]"],
+      ["Contratista / NIT", "[COMPLETAR]"],
+      ["Valor inicial y adiciones", "[COMPLETAR]"],
+      ["Plazo y fechas (suscripción, inicio, terminación)", "[COMPLETAR]"],
+      ["CDP / RP", "[COMPLETAR]"],
+      ["Garantías (amparos y vigencias)", "[COMPLETAR]"],
+      ["Supervisor", "[COMPLETAR]"]
+     ]},
+    {"tipo": "h1", "texto": "3. Seguimiento técnico"},
+    {"tipo": "tabla", "encabezados": ["Obligación", "Actividad ejecutada", "Evidencia", "Cumple"],
+     "anchos_cm": [5, 5, 4.5, 2], "alineacion": ["izq", "izq", "izq", "cen"],
+     "filas": [["[COMPLETAR]", "[COMPLETAR]", "[COMPLETAR]", "Sí/Parcial/No"]]},
+    {"tipo": "h1", "texto": "4. Seguimiento financiero"},
+    {"tipo": "tabla", "encabezados": ["Concepto", "Valor ($)"], "anchos_cm": [10, 6.5], "alineacion": ["izq", "der"],
+     "filas": [["Valor total del contrato", "[ ]"], ["Valor ejecutado acumulado", "[ ]"], ["Valor pagado acumulado", "[ ]"]],
+     "total": ["Saldo por ejecutar", "[ ]"], "nota": "Fuente: [COMPLETAR: SAP / SECOP II], corte [COMPLETAR]."},
+    {"tipo": "h1", "texto": "5. Seguimiento administrativo y jurídico"},
+    {"tipo": "vinetas", "items": [
+      "Pago de seguridad social y parafiscales del periodo verificado: [COMPLETAR].",
+      "Vigencia de garantías: [COMPLETAR].",
+      "Documentos publicados en SECOP II: [COMPLETAR].",
+      "Cumplimiento de cláusulas anticorrupción y obligaciones ambientales/sociales pactadas: [COMPLETAR]."
+    ]},
+    {"tipo": "alerta", "nivel": "medio", "texto": "Registre aquí cualquier riesgo de incumplimiento, con causa, efecto y acción propuesta."},
+    {"tipo": "h1", "texto": "6. Concepto del supervisor"},
+    {"tipo": "p", "texto": "[COMPLETAR: concepto y recomendación]."}
+  ],
+  "firmas": [{"nombre": "[COMPLETAR: nombre]", "cargo": "Supervisor(a)", "dependencia": "[COMPLETAR]"}],
+  "control": [{"rol": "Proyectó", "nombre": "[COMPLETAR]", "cargo": "[COMPLETAR]"}],
+  "aviso_ia": true
+}

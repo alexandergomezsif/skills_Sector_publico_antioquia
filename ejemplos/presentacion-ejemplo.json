@@ -1,0 +1,29 @@
+{
+  "titulo": "Seguimiento al plan de acción 2026",
+  "subtitulo": "Comité directivo — datos de ejemplo",
+  "dependencia": "Secretaría de [COMPLETAR]",
+  "fecha": "[COMPLETAR: fecha]",
+  "diapositivas": [
+    {"tipo": "seccion", "titulo": "1. Dónde estamos", "subtitulo": "Corte: [COMPLETAR]"},
+    {"tipo": "kpis", "titulo": "La ejecución presupuestal va 6 puntos por debajo de lo programado",
+     "items": [
+       {"valor": "72 %", "etiqueta": "Compromisos / apropiación definitiva"},
+       {"valor": "48 %", "etiqueta": "Obligaciones / apropiación definitiva"},
+       {"valor": "64 %", "etiqueta": "Avance físico promedio de metas"}
+     ],
+     "fuente": "Fuente: datos ficticios de demostración. Reemplazar por el reporte oficial.",
+     "notas": "Explicar la diferencia entre compromiso y obligación."},
+    {"tipo": "grafico", "titulo": "Los compromisos se aceleraron en el tercer trimestre", "grafico": "columnas",
+     "categorias": ["T1", "T2", "T3"],
+     "series": [{"nombre": "Programado", "valores": [0.25, 0.55, 0.78]}, {"nombre": "Ejecutado", "valores": [0.18, 0.44, 0.72]}],
+     "formato_numero": "0%", "fuente": "Fuente: datos ficticios de demostración."},
+    {"tipo": "tabla", "titulo": "Dos programas concentran el rezago",
+     "encabezados": ["Programa", "Meta vigencia", "Avance", "%"],
+     "filas": [["Programa A", "100", "82", "82 %"], ["Programa B", "40", "18", "45 %"], ["Programa C", "12", "5", "42 %"]],
+     "fuente": "Fuente: datos ficticios de demostración."},
+    {"tipo": "dos_columnas", "titulo": "Causas y acciones",
+     "izquierda": {"subtitulo": "Causas", "vinetas": ["Procesos declarados desiertos", "Lluvias en subregiones"]},
+     "derecha": {"subtitulo": "Acciones", "vinetas": ["Reapertura en diciembre", "Ajuste del cronograma de obra"]}},
+    {"tipo": "cierre", "titulo": "Decisiones requeridas", "vinetas": ["Aprobar traslado presupuestal [COMPLETAR]", "Definir responsable del programa B"]}
+  ]
+}
