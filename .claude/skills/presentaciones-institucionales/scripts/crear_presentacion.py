@@ -60,6 +60,8 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 ESCUDO_CANDIDATOS = [
     SCRIPT_DIR.parent.parent / "marca-gobernacion" / "assets" / "escudo" / "escudo-color.png",
     SCRIPT_DIR.parent / "assets" / "escudo-color.png",
+    # Respaldo: PNG oficial del portal antioquia.gov.co en resolución de pantalla (157 x 70 px).
+    SCRIPT_DIR.parent.parent / "marca-gobernacion" / "assets" / "escudo" / "escudo-color-pantalla.png",
 ]
 
 

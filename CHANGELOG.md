@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## [1.1.0] — 2026-11-11
+
+- Escudo oficial en resolución de pantalla (157 × 70 px) incluido y usado por los generadores de Word y
+  PowerPoint como respaldo.
+- `marca-gobernacion`: sección de aplicativos y herramientas internas con las convenciones del aplicativo
+  de consulta de valorización en VUR (Secretaría de Infraestructura).
+
 ## [1.0.0] — 2026-11-11
 
 Versión inicial.

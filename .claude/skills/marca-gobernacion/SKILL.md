@@ -101,6 +101,23 @@ No estirar ni distorsionar tipografías.
 Manuales complementarios: obra pública (vallas, volantes, marcación de vehículos), audiovisual,
 conglomerado (descentralizadas), "Antioquia es Mágica" (marca territorial; contrato de gestión aparte).
 
+## Aplicativos, tableros y herramientas internas
+
+Convenciones ya aplicadas en el aplicativo de consulta de valorización en VUR (Secretaría de
+Infraestructura), útiles para cualquier herramienta interna:
+
+- Encabezado **blanco** con el escudo oficial directamente sobre él (fondo blanco sin contenedor), al
+  menos 150 × 67 px, con área de protección libre. Nunca dibujar el escudo en código: incrustar el PNG oficial.
+- Paleta de trabajo: fondo neutro `#F3F6F4`, líneas `#D5DED9`, texto `#1C2723`, texto secundario
+  `#5B6B64`; acentos institucionales verde `#018D38` y verde oscuro `#0B5640`.
+- Colores semánticos (no institucionales) solo para estados: error `#B3261E`, advertencia `#E0A100`,
+  inactivo `#9AA8A1`; éxito con el verde institucional; información con el azul `#3561AB`.
+- Tipografía Poppins incrustada o instalada (licencia SIL OFL 1.1); respaldo Segoe UI en Windows y Arial
+  en documentos.
+- Título de ventana: "<Aplicativo> · <Secretaría> · <Dependencia> · Gobernación de Antioquia".
+- Crédito del desarrollador y versión en la ventana "Acerca de", junto a "Gobernación de Antioquia · uso interno".
+- Estilo de interfaz: minimalista y legible; nada de marcas de gobierno ni eslóganes.
+
 ## Lista de verificación de una pieza
 
 - [ ] Solo escudo oficial, sin alteraciones, en posición y tamaño correctos, con área de protección.

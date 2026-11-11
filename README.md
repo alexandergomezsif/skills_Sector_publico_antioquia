@@ -51,10 +51,10 @@ la carpeta y ponga sus archivos de insumo en `datos/` (excluida de Git).
 
 ### Escudo oficial
 
-Coloque los archivos oficiales entregados por la Dirección de Comunicaciones en
-`.claude/skills/marca-gobernacion/assets/escudo/` (ver `LEEME.md` allí). Sin ellos, los documentos salen
-con un marcador "ESCUDO OFICIAL" para evitar publicar piezas incorrectas. El repositorio no incluye el
-escudo para no distribuir versiones no autorizadas.
+El repositorio incluye el PNG oficial del portal antioquia.gov.co en resolución de pantalla (157 × 70 px),
+que usan los generadores de Word y PowerPoint. Para impresión, pida a la Dirección de Comunicaciones la
+versión en alta resolución y guárdela como `.claude/skills/marca-gobernacion/assets/escudo/escudo-color.png`
+(ver `LEEME.md` allí); los scripts la preferirán automáticamente.
 
 ## Herramientas incluidas
 
@@ -76,7 +76,7 @@ Marcados como **[POR VERIFICAR]** en los archivos. Los principales:
    ≥ 1.200.000 SMMLV).
 2. Delegaciones contractuales posteriores al Decreto 2025070000089 de 2025.
 3. Dependencias internas exactas del Decreto Ordenanzal 2024070003913 de 2024.
-4. Plantilla oficial de presentaciones y archivos del escudo (Dirección de Comunicaciones).
+4. Plantilla oficial de presentaciones y escudo en alta resolución para impresión (Dirección de Comunicaciones).
 5. Número de la ordenanza del estatuto orgánico de presupuesto departamental.
 6. Fallo de fondo del Consejo de Estado sobre el salario mínimo 2026 y control de constitucionalidad
    del Decreto Legislativo 1420 de 2026.
