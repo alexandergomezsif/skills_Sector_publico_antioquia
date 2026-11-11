@@ -31,7 +31,7 @@ scripts/                          Empaquetar skills (.zip) y regenerar plantilla
 ### Opción A — Claude Code (recomendada para equipos técnicos)
 
 ```bash
-git clone <url-del-repositorio> && cd gobernacion-antioquia-claude
+git clone https://github.com/alexandergomezsif/skills_Sector_publico_antioquia.git && cd skills_Sector_publico_antioquia
 pip install -r requirements.txt
 claude
 ```
