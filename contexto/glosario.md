@@ -30,3 +30,18 @@
 | SGR | Sistema General de Regalías (Ley 2056 de 2020). |
 | SMMLV | Salario mínimo mensual legal vigente. |
 | UVT | Unidad de Valor Tributario. |
+| SIF | Secretaría de Infraestructura Física de la Gobernación. |
+| Red vial primaria / secundaria / terciaria | Vías de 1.er orden (troncales y transversales, nación/concesiones), 2.º orden (intermunicipales, a cargo del Departamento) y 3.er orden (veredales, a cargo de municipios o del Departamento). Fajas de retiro: 60, 45 y 30 m (Ley 1228 de 2008). |
+| R10 / Circular 10 | Inventario de la red vial del Departamento publicado como servicio ArcGIS "R10" (capas primaria, secundaria y terciaria). |
+| Código de vía | Identificador del tramo: `05xxxVTnn` (terciaria: DANE del municipio + VT + consecutivo), `rrANnn` (secundaria departamental derivada de la ruta nacional rr). |
+| Abscisa | Ubicación a lo largo de la vía en formato K8+300 (kilómetro 8 más 300 m). |
+| SINC | Sistema Integral Nacional de Información de Carreteras (Ley 1228 de 2008, art. 10). |
+| SIPUCOL 2.0 | Sistema de Administración de Puentes de Colombia (Res. MinTransporte 20263040023605 de 2026). |
+| CCP-14 | Norma Colombiana de Diseño de Puentes (Res. MinTransporte 108 de 2015). |
+| Placa huella | Pavimento de dos franjas de concreto para las ruedas, con riostras y zona central en ciclópeo o piedra; Guía Res. 4401 de 2017. |
+| Frente (de trabajo) | Sitio con maquinaria y personal asignados a una emergencia vial o a un punto crítico, con inicio, fin estimado y avance. |
+| Punto crítico | Sitio de la vía con falla recurrente o riesgo que se interviene de forma preventiva o correctiva. |
+| Pérdida de banca | Falla del lleno o del talud inferior que reduce o elimina la calzada. |
+| Maquinaria amarilla | Equipo pesado de construcción: motoniveladora, retroexcavadora, excavadora, bulldozer, vibrocompactador, cargador; con volquetas y cama baja. |
+| Días-máquina | Equipos × días trabajados; base del costo de alquiler (día = 8 h en el contrato de referencia). |
+| DAGRAN | Departamento Administrativo de Gestión del Riesgo de Desastres de Antioquia. |

@@ -15,6 +15,15 @@ Consulta en este orden. Una fuente secundaria nunca es la única base de una afi
 | Normativa Gobernación | https://antioquia.gov.co (normativa, gaceta) | Ordenanzas, decretos y resoluciones departamentales |
 | Asamblea de Antioquia | https://www.asambleadeantioquia.gov.co | Ordenanzas |
 
+## 1.b Normas técnicas de infraestructura
+
+| Fuente | URL | Uso |
+|---|---|---|
+| INVIAS — normativa y documentos técnicos | https://www.invias.gov.co | Especificaciones, manuales, normas de ensayo, agenda regulatoria |
+| Ministerio de Transporte | https://www.mintransporte.gov.co | Resoluciones de categorización, SINC, SIPUCOL, señalización |
+| Malla vial R10 (Gobernación) | https://services5.arcgis.com/K90UQIB09TmTjUL8/arcgis/rest/services/R10/FeatureServer | Inventario de red vial departamental |
+| Boletines de estado de vías (SIF) | https://www.antioquia.gov.co | Cierres, restricciones, frentes activos publicados |
+
 ## 2. Jurisprudencia
 
 | Fuente | URL |

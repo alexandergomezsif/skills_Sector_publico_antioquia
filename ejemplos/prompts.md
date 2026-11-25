@@ -29,6 +29,15 @@ Copie, ajuste y adjunte los archivos que correspondan. Claude usará las skills 
 - "Con el exporte de SECOP II adjunto, resume la contratación 2026 por modalidad y estado, y grafica."
 - "Calcula el avance de metas del plan de acción adjunto y señala los indicadores en riesgo."
 
+## Ingeniería vial y obras
+- "¿De quién es la vía 05282VT28, cuánto mide y qué superficie tiene?"
+- "Dame el inventario de vías terciarias de Fredonia por superficie y estado, en Excel."
+- "Con el Excel de frentes de esta semana y el de la anterior, haz el informe semanal de frentes y maquinaria."
+- "Redacta el informe de visita técnica de la pérdida de banca en el K8+300 de la vía [ ], con estas fotos."
+- "¿Cuánto cuesta un frente de 10 días con motoniveladora, vibrocompactador, retro y dos doble troque?"
+- "¿Qué especificación INVIAS y qué controles de calidad aplican a una placa huella?"
+- "Prepara la ficha de inspección post-sismo para los puentes de la vía [ ]."
+
 ## Marca
 - "Revisa esta pieza: ¿cumple el manual de identidad visual?"
 - "Dame la paleta en CSS para el tablero de la dependencia."

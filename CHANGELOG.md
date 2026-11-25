@@ -1,5 +1,23 @@
 # Registro de cambios
 
+## [1.2.0] — 2026-11-25
+
+- Nueva skill **`ingenieria-vial-obras`** (Secretaría de Infraestructura Física):
+  - Normativa técnica verificada a nov. 2026: Ley 1228 (fajas de retiro), Ley 1682, Especificaciones
+    Generales INVIAS 2022 (Res. 4561 y 2451 de 2022), manuales de diseño geométrico, drenaje, cimentaciones,
+    mantenimiento y pavimentos, Guía de placa huella (Res. 4401 de 2017), CCP-14 (Res. 108 de 2015),
+    SIPUCOL 2.0 (Res. 20263040023605 de 2026), Manual de Señalización 2024, contención vehicular 2022-2024,
+    Plan de cambio climático del sector transporte 2026.
+  - Malla vial **R10** (ArcGIS, Circular 10): capas, campos, dominios, códigos de vía, calidad de datos y
+    consultas REST; script `consultar_red_vial.py` (buscar, municipio, resumen, conteo, GeoJSON).
+  - Puentes: inspección, daños, protocolo post-sismo, paso de maquinaria pesada.
+  - Mantenimiento, emergencias viales, puntos críticos, estructura del Excel de frentes activos,
+    maquinaria amarilla, tarifas de referencia 2026 y lecciones del contrato de maquinaria.
+  - Pavimentos, placa huella, drenaje, taludes, control de calidad.
+  - Plantillas: informe de visita técnica, ficha de emergencia vial, informe semanal de frentes.
+  - Script `costo_frentes.py` (equipos × días × tarifa, Excel con fórmulas).
+- `CLAUDE.md`, glosario, fuentes oficiales, mantenimiento y ejemplos actualizados.
+
 ## [1.1.0] — 2026-11-11
 
 - Escudo oficial en resolución de pantalla (157 × 70 px) incluido y usado por los generadores de Word y

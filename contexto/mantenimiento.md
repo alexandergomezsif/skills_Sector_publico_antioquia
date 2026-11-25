@@ -19,6 +19,13 @@ El repositorio solo es útil si está al día. Responsable sugerido: un enlace d
 - [ ] Reforma al manual de contratación departamental o a delegaciones → `contexto/gobernacion-antioquia.md`.
 - [ ] Fin o prórroga del régimen de emergencia del terremoto (Decreto 1420 de 2026) → `novedades-2026.md`.
 
+## Infraestructura vial (cada semestre)
+
+- [ ] Versión vigente de las Especificaciones Generales de Construcción, manuales INVIAS y Manual de Señalización → `ingenieria-vial-obras/references/normativa-tecnica-vial.md`.
+- [ ] Estado de los proyectos normativos marcados [POR VERIFICAR] (SINC v5, CCP-14 Sección 13, Manual de Estabilidad de Taludes, categorización 2026).
+- [ ] Estructura y conteos del servicio R10 (`consultar_red_vial.py conteo`; si cambian los campos, actualizar el script y `red-vial-antioquia-r10.md`).
+- [ ] Tarifas de maquinaria del contrato vigente → `ingenieria-vial-obras/assets/tarifas-maquinaria-2026.json` (renombrar con el año).
+
 ## Con cada versión del Manual de Identidad Visual
 
 - [ ] Colores, tipografía y reglas → `marca-gobernacion/SKILL.md`, `assets/marca.json`.

@@ -2,7 +2,7 @@
 
 Repositorio de contexto, *skills* y plantillas para que Claude asista a servidores públicos y
 contratistas de la Gobernación de Antioquia en informes, presentaciones, contratación estatal,
-derecho público y análisis de datos, respetando el Manual de Identidad Visual y la normativa vigente.
+derecho público, análisis de datos e ingeniería vial, respetando el Manual de Identidad Visual y la normativa vigente.
 
 > **Corte normativo: noviembre de 2026.** El contenido no sustituye a la Oficina Jurídica, la Dirección
 > Contractual ni al supervisor. Todo producto es un borrador que revisa y firma el servidor competente.
@@ -21,6 +21,9 @@ contexto/                         Estructura, Plan de Desarrollo, valores 2026, 
   derecho-publico-colombiano/     Peticiones, CPACA, régimen departamental, presupuesto, transparencia,
                                   disciplinario, 4 plantillas, calculadora de días hábiles con festivos
   analisis-datos-excel/           Perfilador de calidad, ejecución presupuestal, tablas resumen
+  ingenieria-vial-obras/          Normas INVIAS/MinTransporte, malla vial ArcGIS R10, puentes, pavimentos,
+                                  drenaje, taludes, emergencias, frentes y maquinaria; 3 plantillas;
+                                  consulta de red vial y costos de maquinaria
 ejemplos/                         JSON de ejemplo, Excel ficticio, solicitudes sugeridas
 plantillas/                       Informe y presentación de ejemplo generados por los scripts
 scripts/                          Empaquetar skills (.zip) y regenerar plantillas
@@ -67,6 +70,8 @@ versión en alta resolución y guárdela como `.claude/skills/marca-gobernacion/
 | `perfilar_excel.py` | Diagnóstico de calidad de un Excel antes de analizarlo | `ejemplos/ejecucion-ficticia.xlsx` |
 | `ejecucion_presupuestal.py` | Ejecución por dependencia/rubro con Excel de fórmulas vivas | `--agrupar Dependencia` |
 | `tabla_resumen.py` | Tabla dinámica de cualquier base (p. ej. exporte SECOP II) | `--agrupar Modalidad --sumar Valor --moneda` |
+| `consultar_red_vial.py` | Malla vial R10 (ArcGIS): buscar vía, inventario municipal, km por subregión/estado, GeoJSON | `buscar "05282VT28"` · `municipio 05282 --salida vias.xlsx` |
+| `costo_frentes.py` | Costo de maquinaria por frente (equipos × días × tarifa), Excel con fórmulas | `--equipo MT 10 --equipo "VQ DT" 10 2` |
 
 ## Puntos que deben confirmarse con la Gobernación
 
@@ -78,6 +83,8 @@ Marcados como **[POR VERIFICAR]** en los archivos. Los principales:
 3. Dependencias internas exactas del Decreto Ordenanzal 2024070003913 de 2024.
 4. Plantilla oficial de presentaciones y escudo en alta resolución para impresión (Dirección de Comunicaciones).
 5. Número de la ordenanza del estatuto orgánico de presupuesto departamental.
+6. Número, fecha y alcance de la Circular 10 (inventario de la red vial publicado como servicio R10) y
+   tarifas de maquinaria vigentes en el contrato (referencia: hoja de tarifas de oct. 2026).
 6. Fallo de fondo del Consejo de Estado sobre el salario mínimo 2026 y control de constitucionalidad
    del Decreto Legislativo 1420 de 2026.
 7. Fecha exacta de entrada en vigencia de la compra pública sostenible (Decreto 0997, art. 14) para
