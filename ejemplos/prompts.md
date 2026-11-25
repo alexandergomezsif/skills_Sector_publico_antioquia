@@ -38,6 +38,16 @@ Copie, ajuste y adjunte los archivos que correspondan. Claude usará las skills 
 - "¿Qué especificación INVIAS y qué controles de calidad aplican a una placa huella?"
 - "Prepara la ficha de inspección post-sismo para los puentes de la vía [ ]."
 
+## Secretaría de Infraestructura Física (por dependencia)
+- "¿Qué dirección de la SIF debe responder una solicitud sobre la compra de una franja de un predio para la vía [ ]?"
+- "Haz la lista de maduración del proceso de mejoramiento del corredor [código] antes de radicarlo."
+- "Redacta la oferta formal de compra (borrador) para el predio de la ficha adjunta."
+- "¿Este mejoramiento de vía requiere licencia ambiental o basta el PAGA? ¿Qué permisos necesito?"
+- "Resume cuántos contratos de obra e interventoría ha firmado el Departamento en 2026 según SECOP II."
+- "Prepara la exposición de motivos de una ordenanza para decretar una obra por valorización."
+- "Arma el tablero mensual de la SIF: metas del Plan Vial, ejecución presupuestal y contratos críticos."
+- "¿Es obligatorio el patrimonio autónomo para el anticipo de este contrato de obra de menor cuantía?"
+
 ## Marca
 - "Revisa esta pieza: ¿cumple el manual de identidad visual?"
 - "Dame la paleta en CSS para el tablero de la dependencia."

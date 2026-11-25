@@ -1,5 +1,21 @@
 # Registro de cambios
 
+## [1.3.0] — 2026-11-25
+
+- Nueva skill **`secretaria-infraestructura-fisica`**: estructura y funciones oficiales de la SIF
+  (Decreto Ordenanzal 2024070003913, páginas de cada dirección), equivalencias con la estructura de 2020,
+  flujo entre dependencias; estructuración de proyectos (MGA, BPIN, SGR, maduración, fuentes, Plan Vial,
+  APP); gestión predial (Leyes 9/1989, 388/1997, 1682/2013, 1742/2014, 1882/2018; Res. IGAC 620/2008,
+  898/2014, 1044/2014, 316/2015); gestión social y ambiental (Decreto 1076: licencia vs. PAGA, permisos,
+  consulta previa); asuntos legales; administrativa y financiera y **valorización** (Ordenanzas 46/2022 y
+  22/2024, proyectos vigentes, cobro, paz y salvo); programas y metas 2024-2027; dirección y coordinación.
+  Plantillas: lista de maduración y ficha predial.
+- `contratacion-estatal`: nueva referencia `contratacion-obra-infraestructura.md` (Documentos Tipo de
+  transporte vigentes, interventoría, anticipo y fiducia, garantías, actas de obra, APU/AIU, alertas) y
+  script **`consultar_secop.py`** (SECOP II datos abiertos).
+- `ingenieria-vial-obras`: el lector de códigos reconoce rutas con letra (`25BAN06`).
+- CLAUDE.md (alerta 7 y ruta por dependencia), README, glosario, fuentes, mantenimiento y ejemplos.
+
 ## [1.2.0] — 2026-11-25
 
 - Nueva skill **`ingenieria-vial-obras`** (Secretaría de Infraestructura Física):

@@ -44,4 +44,13 @@
 | Pérdida de banca | Falla del lleno o del talud inferior que reduce o elimina la calzada. |
 | Maquinaria amarilla | Equipo pesado de construcción: motoniveladora, retroexcavadora, excavadora, bulldozer, vibrocompactador, cargador; con volquetas y cama baja. |
 | Días-máquina | Equipos × días trabajados; base del costo de alquiler (día = 8 h en el contrato de referencia). |
+| Oferta formal de compra | Acto que inicia la adquisición de un predio para obra; se inscribe en el folio. Si en 30 días hábiles no hay acuerdo, se inicia la expropiación (Ley 1682 art. 25, mod. Ley 1742). |
+| Avalúo comercial corporativo | Avalúo de lonja o IGAC para adquisición predial (Res. IGAC 620/2008 y 898/2014). |
+| PAGA | Programa de Adaptación de la Guía Ambiental: instrumento de las actividades de mejoramiento, que no requieren licencia ambiental (Decreto 1076, art. 2.2.2.5.4.3). |
+| Contribución de valorización | Tributo sobre los predios beneficiados por una obra; en Antioquia, Ordenanza 46 de 2022 modificada por Ordenanza 22 de 2024 (beneficio local y beneficio general). |
+| Resolución distribuidora | Acto que asigna la contribución de valorización a cada predio. |
+| APU / AIU | Análisis de Precios Unitarios / Administración, Imprevistos y Utilidad del presupuesto de obra. |
+| Administración delegada | Modalidad en que una entidad (p. ej. la EICE Rentan) ejecuta obras por cuenta del Departamento con recursos de este. |
+| Rentan | Empresa Industrial y Comercial del Estado Renting de Antioquia: contratos interadministrativos de mantenimiento vial y maquinaria. |
+| GESPROY | Aplicativo de seguimiento de proyectos del Sistema General de Regalías. |
 | DAGRAN | Departamento Administrativo de Gestión del Riesgo de Desastres de Antioquia. |

@@ -2,7 +2,7 @@
 
 Repositorio de contexto, *skills* y plantillas para que Claude asista a servidores públicos y
 contratistas de la Gobernación de Antioquia en informes, presentaciones, contratación estatal,
-derecho público, análisis de datos e ingeniería vial, respetando el Manual de Identidad Visual y la normativa vigente.
+derecho público, análisis de datos, ingeniería vial y funcionamiento de la Secretaría de Infraestructura Física, respetando el Manual de Identidad Visual y la normativa vigente.
 
 > **Corte normativo: noviembre de 2026.** El contenido no sustituye a la Oficina Jurídica, la Dirección
 > Contractual ni al supervisor. Todo producto es un borrador que revisa y firma el servidor competente.
@@ -21,6 +21,9 @@ contexto/                         Estructura, Plan de Desarrollo, valores 2026, 
   derecho-publico-colombiano/     Peticiones, CPACA, régimen departamental, presupuesto, transparencia,
                                   disciplinario, 4 plantillas, calculadora de días hábiles con festivos
   analisis-datos-excel/           Perfilador de calidad, ejecución presupuestal, tablas resumen
+  secretaria-infraestructura-fisica/  Estructura y funciones de la SIF, estructuración, gestión predial,
+                                  social y ambiental, asuntos legales, proyectos, finanzas y valorización,
+                                  coordinación; 2 plantillas
   ingenieria-vial-obras/          Normas INVIAS/MinTransporte, malla vial ArcGIS R10, puentes, pavimentos,
                                   drenaje, taludes, emergencias, frentes y maquinaria; 3 plantillas;
                                   consulta de red vial y costos de maquinaria
@@ -70,6 +73,7 @@ versión en alta resolución y guárdela como `.claude/skills/marca-gobernacion/
 | `perfilar_excel.py` | Diagnóstico de calidad de un Excel antes de analizarlo | `ejemplos/ejecucion-ficticia.xlsx` |
 | `ejecucion_presupuestal.py` | Ejecución por dependencia/rubro con Excel de fórmulas vivas | `--agrupar Dependencia` |
 | `tabla_resumen.py` | Tabla dinámica de cualquier base (p. ej. exporte SECOP II) | `--agrupar Modalidad --sumar Valor --moneda` |
+| `consultar_secop.py` | Contratos del Departamento en SECOP II (datos abiertos): resumen, búsqueda, detalle | `resumen --infra --desde 2026-01-01` |
 | `consultar_red_vial.py` | Malla vial R10 (ArcGIS): buscar vía, inventario municipal, km por subregión/estado, GeoJSON | `buscar "05282VT28"` · `municipio 05282 --salida vias.xlsx` |
 | `costo_frentes.py` | Costo de maquinaria por frente (equipos × días × tarifa), Excel con fórmulas | `--equipo MT 10 --equipo "VQ DT" 10 2` |
 

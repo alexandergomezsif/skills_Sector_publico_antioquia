@@ -210,6 +210,7 @@ def interpretar_codigo(codigo: str) -> dict:
       25AN01-2-1  -> secundaria departamental: ruta nacional 25 + "AN" (Antioquia) + consecutivo 01,
                      ramal 2, sub-ramal 1
       25ANF       -> tramo con sufijo literal (variante/paso), ruta 25
+      25BAN06     -> secundaria derivada de la ruta nacional 25B (variante de la ruta 25)
     La correspondencia "ruta + AN + consecutivo" es la convención de codificación de vías
     departamentales; confírmela con el inventario oficial antes de citarla en un acto. [INFERENCIA]
     """
@@ -218,7 +219,7 @@ def interpretar_codigo(codigo: str) -> dict:
     if m:
         return {"codigo": c, "tipo": "terciaria", "municipio_dane": m.group(1),
                 "consecutivo": m.group(2) + m.group(3)}
-    m = re.fullmatch(r"(\d{2})AN(\d{2})?([A-Z]*)((?:-\d+)*)", c)
+    m = re.fullmatch(r"(\d{2}[A-Z]?)AN(\d{2})?([A-Z]*)((?:-\d+)*)", c)
     if m:
         ramales = [x for x in m.group(4).split("-") if x]
         return {"codigo": c, "tipo": "secundaria departamental", "ruta_nacional": m.group(1),
