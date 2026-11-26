@@ -1,5 +1,21 @@
 # Registro de cambios
 
+## [1.5.0] — 2026-11-26
+
+Curso de contratación estatal, versión 2.1, tras contrastarlo con el material de un diplomado externo
+(usado solo como lista de temas; redacción propia y normas verificadas en fuentes oficiales).
+- Nuevo módulo **"Quién no puede contratar: inhabilidades, nulidad y responsabilidades"**: Ley 80 arts. 8-10,
+  44-48, 50-58; Ley 1474 arts. 3, 4 y 90 (texto vigente tras la Ley 1955 de 2019 y la Ley 2195 de 2022);
+  conflicto de interés (CPACA art. 11); responsabilidad fiscal, disciplinaria (Ley 1952 de 2019), penal y civil.
+- Módulos ampliados: control ciudadano y veedurías (marco normativo); consorcios, uniones temporales,
+  competencia para contratar y regímenes especiales (actores); clases, suficiencia, vigencia y efectividad de
+  las garantías según el Decreto 1082 de 2015 (garantías); poderes excepcionales, art. 14 a 19 de la Ley 80
+  (supervisión y modificaciones).
+- Taller: 4 casos nuevos (exservidor, unión temporal, cálculo de pólizas, contrato nulo) y **cuadro
+  comparativo de modalidades** interactivo; 17 preguntas nuevas en los módulos (103 en total).
+- Claves de respuesta estables por identificador de módulo (`m15-q0`); textos con el número de módulos
+  calculado; memorias en PDF actualizadas (52 páginas) con el cuadro comparativo como anexo.
+
 ## [1.4.0] — 2026-11-26
 
 - Nuevo **curso de contratación estatal** en `curso/`: 14 módulos, 86 preguntas, taller de 10 casos,

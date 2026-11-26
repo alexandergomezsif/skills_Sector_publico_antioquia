@@ -4,15 +4,16 @@ from pathlib import Path
 AQUI = Path(__file__).resolve().parent
 sys.path.insert(0, str(AQUI / 'fuente'))
 CHROME = sys.argv[1] if len(sys.argv) > 1 else None  # ruta opcional a Chrome
-from contenido import MODULOS, GLOSARIO, PLAZOS
-from contenido2 import EXTRA, CASOS, ORDEN_LICITACION
+from contenido import GLOSARIO as GLOS_BASE, PLAZOS
+from contenido2 import CASOS as CASOS_BASE, ORDEN_LICITACION
+from contenido3 import armar, CASOS_NUEVOS, COMPARATIVO, GLOSARIO_NUEVO
+CASOS = CASOS_BASE + CASOS_NUEVOS
+GLOSARIO = sorted(GLOS_BASE + GLOSARIO_NUEVO, key=lambda g: g[0].lower())
 
 ESCUDO = base64.b64encode(open(AQUI.parent / '.claude/skills/marca-gobernacion/assets/escudo/escudo-color-pantalla.png', 'rb').read()).decode()
 ETAPAS = [("bases", "Bases"), ("plan", "Planeación"), ("sel", "Selección"), ("ejec", "Celebración y ejecución"), ("cierre", "Cierre y temas especiales")]
 EN = dict(ETAPAS)
-mods = copy.deepcopy(MODULOS)
-for m in mods:
-    m["quiz"] = m["quiz"] + EXTRA[m["id"]]
+mods = armar()
 
 def strip_stack(h):
     # en impresión las tablas se ven completas: quitamos la clase responsive
@@ -64,7 +65,7 @@ partes.append(f"""
 <div class="band"><p class="meta" style="color:#bfe3cf">Memorias del curso · formación interna</p>
 <h1>Curso de contratación estatal desde cero</h1>
 <p>Guía de estudio para servidores y contratistas de la Gobernación de Antioquia: la vida de un contrato público, desde la necesidad hasta la liquidación.</p>
-<p style="margin-top:14pt">Versión 2.0 · corte normativo: noviembre de 2026</p></div>
+<p style="margin-top:14pt">Versión 2.1 · corte normativo: noviembre de 2026</p></div>
 <div class="meta">Material de autoestudio elaborado con asistencia de IA a partir de normas verificadas a noviembre de 2026. No es un concepto jurídico ni reemplaza a la Secretaría General, a la Dirección de Asuntos Legales ni al Manual de Contratación del Departamento. Verifique el texto vigente de cada norma antes de decidir.</div>
 </section>""")
 
@@ -73,7 +74,7 @@ partes.append(f"""
 <section>
 <h2>Contenido</h2>
 <table class="toc"><tr><th></th><th>Módulo</th><th>Etapa</th><th>Estudio</th></tr>{toc}</table>
-<p>Anexos: taller de casos · las etapas de una licitación · plazos frecuentes · glosario · fuentes.</p>
+<p>Anexos: taller de casos · cuadro comparativo de modalidades · las etapas de una licitación · plazos frecuentes · glosario · fuentes.</p>
 </section><section class="mod"><h2>Cómo usar estas memorias</h2>
 <ol>
 <li>Lea los módulos en orden: siguen la ruta de un contrato (bases, planeación, selección, celebración y ejecución, cierre).</li>
@@ -107,13 +108,14 @@ casos = "".join(
     f"<div class='caso'><p class='meta'>Caso {n+1} · {EN[c['area']]}</p><h3 style='margin-top:0'>{c['t']}</h3><p>{c['s']}</p><ol>"
     + "".join(f"<li>{q['q']}<br><span class='meta'>" + " · ".join(f"{'abc'[n]}) {q['o'][i]}" for n, i in enumerate(sorted(range(len(q['o'])), key=lambda i: hashlib.md5((q['q'] + q['o'][i]).encode()).hexdigest()))) + "</span></li>" for q in c["q"])
     + "</ol></div>" for n, c in enumerate(CASOS))
-partes.append(f"<section class='mod'><h2>Anexo A. Taller de casos</h2><p>Diez situaciones reales de la Gobernación. Respóndalas en la página del curso: cuentan el 30 % de la calificación.</p>{casos}</section>")
+partes.append(f"<section class='mod'><h2>Anexo A. Taller de casos</h2><p>{len(CASOS)} situaciones de la Gobernación. Respóndalas en la página del curso: cuentan el 30 % de la calificación.</p>{casos}</section>")
+partes.append("<section class='mod'><h2>Anexo A2. Cuadro comparativo de modalidades</h2><p>Escriba en cada fila la modalidad que corresponde. La solución está en la página del curso.</p><table><tr><th>Característica</th><th style='width:38%'>Modalidad</th></tr>" + "".join(f"<tr><td>{r['t']}</td><td></td></tr>" for r in COMPARATIVO["rows"]) + "</table><p class='meta'>Opciones: " + ", ".join(COMPARATIVO["cols"]) + ".</p></section>")
 partes.append("<section class='mod'><h2>Anexo B. Las etapas de una licitación pública</h2><ol>" + "".join(f"<li>{e}</li>" for e in ORDEN_LICITACION) + "</ol>"
               + "<h2 style='margin-top:16pt'>Anexo C. Plazos frecuentes</h2><table><tr><th>Actuación</th><th>Plazo</th></tr>" + "".join(f"<tr><td>{a}</td><td>{b}</td></tr>" for a, b in PLAZOS) + "</table><p class='meta'>Días hábiles. Verifique en el Decreto 1082 de 2015 y en el pliego del proceso.</p></section>")
 partes.append("<section class='mod'><h2>Anexo D. Glosario</h2><table><tr><th style='width:28%'>Término</th><th>Significado</th></tr>" + "".join(f"<tr><td><b>{a}</b></td><td>{b}</td></tr>" for a, b in GLOSARIO) + "</table></section>")
 partes.append("""<section class='mod'><h2>Anexo E. Fuentes</h2><ul>
 <li>Constitución Política, arts. 2, 209, 267-274, 345-346, 355.</li>
-<li>Ley 80 de 1993; Ley 1150 de 2007; Ley 1474 de 2011; Ley 1882 de 2018; Ley 2022 de 2020; Ley 2195 de 2022; Ley 996 de 2005; Ley 1508 de 2012; Ley 1682 de 2013 y Ley 1742 de 2014.</li>
+<li>Ley 80 de 1993; Ley 1150 de 2007; Ley 1474 de 2011; Ley 1882 de 2018; Ley 2022 de 2020; Ley 2195 de 2022; Ley 2014 de 2019; Ley 1952 de 2019 (Código General Disciplinario); Ley 850 de 2003 y Ley 1757 de 2015 (participación ciudadana); Ley 996 de 2005; Ley 1508 de 2012; Ley 1682 de 2013 y Ley 1742 de 2014.</li>
 <li>Decreto 1082 de 2015 y sus modificaciones, en especial los Decretos 287 y 0997 de 2026; Decreto Legislativo 1420 de 2026; Decreto 1076 de 2015 (sector ambiente).</li>
 <li>Colombia Compra Eficiente: manuales, guías, Documentos Tipo (control de versiones) y conceptos de su relatoría.</li>
 <li>Departamento de Antioquia: Manual de Contratación (Decreto 2018070001630 de 2018, mod. Decreto 2023070004507 de 2023); delegaciones contractuales (Decreto 2025070000089 de 2025); estructura administrativa (Decreto Ordenanzal 2024070003913 de 2024).</li>
@@ -130,7 +132,7 @@ async def pdf():
         pg = await b.new_page()
         await pg.goto((AQUI / 'memorias.html').as_uri())
         await pg.wait_for_timeout(1500)
-        foot = "<div style='font-family:Arial;font-size:7.5pt;color:#5b6b64;width:100%;padding:0 20mm;display:flex;justify-content:space-between'><span>Curso de contratación estatal desde cero · Gobernación de Antioquia · v2.0 nov. 2026</span><span>Página <span class='pageNumber'></span> de <span class='totalPages'></span></span></div>"
+        foot = "<div style='font-family:Arial;font-size:7.5pt;color:#5b6b64;width:100%;padding:0 20mm;display:flex;justify-content:space-between'><span>Curso de contratación estatal desde cero · Gobernación de Antioquia · v2.1 nov. 2026</span><span>Página <span class='pageNumber'></span> de <span class='totalPages'></span></span></div>"
         await pg.pdf(path=str(AQUI / 'Memorias-curso-contratacion-estatal.pdf'), format='Letter', print_background=True,
                      display_header_footer=True, header_template="<div></div>", footer_template=foot,
                      margin={"top": "20mm", "bottom": "18mm", "left": "20mm", "right": "20mm"})

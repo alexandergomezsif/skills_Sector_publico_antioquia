@@ -1,6 +1,6 @@
 # Curso de contratación estatal — instalación y administración
 
-Versión 2.0 (nov. 2026). Página estática (`index.html`) publicada en GitHub Pages + registro de
+Versión 2.1 (nov. 2026). Página estática (`index.html`) publicada en GitHub Pages + registro de
 calificaciones en una hoja de Google mediante Apps Script.
 
 ## 1. Crear el registro en Google Sheets (una sola vez, 10 minutos)
@@ -47,8 +47,8 @@ resultados una vez; la URL queda guardada en ese navegador. Los participantes ne
 | En desarrollo | Índice ≥ 60 o no cumple algún requisito de Competente |
 | Inicial | Índice < 60 |
 
-- Práctica: primera respuesta de las 86 preguntas de los 14 módulos.
-- Taller: primera respuesta de las 23 preguntas de 10 casos + la actividad de ordenar la licitación.
+- Práctica: primera respuesta de las 103 preguntas de los 15 módulos.
+- Taller: primera respuesta de las 32 preguntas de 14 casos + las 9 filas del cuadro comparativo de modalidades + la actividad de ordenar la licitación (42 puntos en total).
 - Evaluación final: 40 preguntas al azar, 8 por etapa (Bases, Planeación, Selección, Celebración y
   ejecución, Cierre y temas especiales); se habilita al completar módulos y taller; máximo 3 intentos
   en 24 horas; cuenta el mejor.

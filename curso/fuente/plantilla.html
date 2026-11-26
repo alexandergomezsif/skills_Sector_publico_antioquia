@@ -90,14 +90,14 @@ __CSS__
 </div>
 <ol class="how">
 <li><span><b>Ingrese con su cédula.</b> Su avance y sus respuestas quedan asociados a usted.</span></li>
-<li><span><b>Estudie los 14 módulos.</b> Cada uno se completa al responder todas sus preguntas; cuenta la primera respuesta.</span></li>
+<li><span><b>Estudie los __NMOD__ módulos.</b> Cada uno se completa al responder todas sus preguntas; cuenta la primera respuesta.</span></li>
 <li><span><b>Resuelva el taller de casos.</b> Diez situaciones reales de la Gobernación.</span></li>
 <li><span><b>Presente la evaluación final.</b> 40 preguntas, 8 por cada etapa. Su nivel aparece en "Mi calificación".</span></li>
 </ol>
 </div></section>
 
 <section class="routebox"><div class="wrap">
-<div class="routehead"><b>La ruta del contrato</b><div class="bar" aria-hidden="true"><i id="pbar"></i></div><span id="ptxt">0 de 14 módulos</span></div>
+<div class="routehead"><b>La ruta del contrato</b><div class="bar" aria-hidden="true"><i id="pbar"></i></div><span id="ptxt">0 de __NMOD__ módulos</span></div>
 <div class="fig" id="route" role="img" aria-label="Mapa de las cinco etapas del curso con sus módulos"><svg id="rsvg"></svg></div>
 <div class="legend" id="legend"></div>
 </div></section>
@@ -110,8 +110,14 @@ __CSS__
 <section class="mod" id="casos">
 <div class="meta">Taller aplicado · 30 % de la calificación</div>
 <h2>Taller de casos de la Gobernación</h2>
-<div class="obj"><b>Instrucciones:</b> lea cada situación y escoja la decisión correcta. Cuenta la primera respuesta. Al final ordene las etapas de una licitación.</div>
+<div class="obj"><b>Instrucciones:</b> lea cada situación y escoja la decisión correcta. Cuenta la primera respuesta. Al final complete el cuadro comparativo de modalidades y ordene las etapas de una licitación.</div>
 <div id="casosList"></div>
+<div class="quiz" id="comparar">
+<h4>Cuadro comparativo: ¿a qué modalidad corresponde cada característica?</h4>
+<p class="meta">Escoja una modalidad en cada fila y verifique. Cuenta el primer intento; cada fila vale como una pregunta del taller.</p>
+<div class="scroll"><table class="comp" id="compTabla"></table></div>
+<div class="done-row"><button class="btn" id="compCheck" type="button">Verificar cuadro</button><span id="compMsg" aria-live="polite"></span></div>
+</div>
 <div class="quiz" id="ordenar">
 <h4>Ordene las etapas de una licitación pública</h4>
 <p class="meta">Use los botones para subir o bajar cada etapa y luego verifique. Cuenta como un caso del taller.</p>
@@ -135,12 +141,12 @@ __CSS__
 <p><b>Índice de apropiación</b> = 20 % práctica de módulos + 30 % taller de casos + 50 % mejor evaluación final.</p>
 <ul>
 <li><b>Práctica de módulos:</b> porcentaje de aciertos en la primera respuesta de las __NPREG__ preguntas de los módulos (las no respondidas cuentan como erradas).</li>
-<li><b>Taller de casos:</b> porcentaje de aciertos en la primera respuesta de las preguntas del taller y la actividad de orden.</li>
+<li><b>Taller de casos:</b> porcentaje de aciertos en la primera respuesta de las preguntas del taller, cada fila del cuadro comparativo y la actividad de orden.</li>
 <li><b>Evaluación final:</b> porcentaje de aciertos del mejor intento; además se mide cada etapa por separado (8 preguntas por etapa).</li>
 </ul>
 <div class="scroll"><table class="stack"><thead><tr><th>Nivel</th><th>Requisitos</th></tr></thead><tbody>
-<tr><td data-l="Nivel">Avanzado</td><td data-l="Requisitos">Índice ≥ 90, evaluación final ≥ 90 % y cada etapa ≥ 7 de 8; 14 módulos y taller completos</td></tr>
-<tr><td data-l="Nivel">Competente</td><td data-l="Requisitos">Índice ≥ 80, evaluación final ≥ 80 % y cada etapa ≥ 6 de 8; 14 módulos y taller completos</td></tr>
+<tr><td data-l="Nivel">Avanzado</td><td data-l="Requisitos">Índice ≥ 90, evaluación final ≥ 90 % y cada etapa ≥ 7 de 8; __NMOD__ módulos y taller completos</td></tr>
+<tr><td data-l="Nivel">Competente</td><td data-l="Requisitos">Índice ≥ 80, evaluación final ≥ 80 % y cada etapa ≥ 6 de 8; __NMOD__ módulos y taller completos</td></tr>
 <tr><td data-l="Nivel">En desarrollo</td><td data-l="Requisitos">Índice ≥ 60 o no cumple algún requisito de Competente</td></tr>
 <tr><td data-l="Nivel">Inicial</td><td data-l="Requisitos">Índice menor que 60</td></tr>
 </tbody></table></div>
@@ -219,6 +225,7 @@ const CASOS=__CASOS__;
 const ORDEN=__ORDEN__;
 const GLOS=__GLOSARIO__;
 const PLAZOS=__PLAZOS__;
+const COMP=__COMP__;
 
 const $=s=>document.querySelector(s);
 const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -266,18 +273,19 @@ if(st)st.textContent="Avance sincronizado con la coordinación";
 }
 
 /* ---------- cálculo de la calificación ---------- */
-const POOL=M.flatMap((m,i)=>m.quiz.map((q,j)=>Object.assign({k:`m${i}q${j}`,area:m.etapa,mod:m.c},q)));
+const POOL=M.flatMap((m,i)=>m.quiz.map((q,j)=>Object.assign({k:`${m.id}-q${j}`,area:m.etapa,mod:m.c},q)));
 const CASOQ=CASOS.flatMap(c=>c.q.map((q,j)=>Object.assign({k:`${c.id}q${j}`},q)));
+function tallerCompleto(){return !!U&&CASOQ.every(q=>U.casos[q.k])&&!!U.orden&&!!U.comp}
 function resultado(){
 const prac=U?U.prac:{},cas=U?U.casos:{},fin=U?U.finals:[];
 const P=pct(POOL.filter(q=>prac[q.k]&&prac[q.k].ok).length/POOL.length*100);
-const nCas=CASOQ.length+1;
-const C=pct((CASOQ.filter(q=>cas[q.k]&&cas[q.k].ok).length+(U&&U.orden&&U.orden.ok?1:0))/nCas*100);
+const nCas=CASOQ.length+1+COMP.rows.length;
+const C=pct((CASOQ.filter(q=>cas[q.k]&&cas[q.k].ok).length+(U&&U.orden&&U.orden.ok?1:0)+(U&&U.comp?U.comp.ok:0))/nCas*100);
 const best=fin.length?fin.reduce((a,b)=>b.pct>a.pct?b:a):null;
 const F=best?best.pct:0;
 const I=pct(0.2*P+0.3*C+0.5*F);
 const modulos=U?M.filter(m=>U.done[m.id]).length:0;
-const tallerOk=U?(CASOQ.every(q=>cas[q.k])&&!!U.orden):false;
+const tallerOk=U?tallerCompleto():false;
 const areas=best?best.areas:{};
 const minArea=best?Math.min(...ETAPAS.map(e=>areas[e.id]??0)):0;
 const completo=modulos===M.length&&tallerOk;
@@ -291,7 +299,7 @@ return {P,C,F,I,nivel,modulos,tallerOk,areas,minArea,best,completo,codigo};
 
 /* ---------- render de módulos ---------- */
 const mins=M.reduce((a,m)=>a+m.min,0);
-$("#facts").innerHTML=[["14","módulos"],[(Math.round(mins/6)/10).toLocaleString("es-CO")+" h","de estudio"],[POOL.length+CASOQ.length,"preguntas y casos"],["40","preguntas en la evaluación"]].map(f=>`<div><b>${f[0]}</b>${f[1]}</div>`).join("");
+$("#facts").innerHTML=[[String(M.length),"módulos"],[(Math.round(mins/6)/10).toLocaleString("es-CO")+" h","de estudio"],[POOL.length+CASOQ.length,"preguntas y casos"],["40","preguntas en la evaluación"]].map(f=>`<div><b>${f[0]}</b>${f[1]}</div>`).join("");
 
 function barajar(n,semilla){let s=0;for(const ch of semilla)s=(s*31+ch.charCodeAt(0))%2147483647;s=s||7;const idx=[...Array(n).keys()];for(let i=n-1;i>0;i--){s=s*16807%2147483647;const j=s%(i+1);[idx[i],idx[j]]=[idx[j],idx[i]]}return idx}
 function qHTML(q,k,n,sem){const ord=barajar(q.o.length,(sem||"")+k+q.q);return `<div class="q" data-k="${k}"><p>${n?n+". ":""}${q.q}</p><div class="ops">${ord.map(i=>`<button type="button" data-o="${i}">${q.o[i]}</button>`).join("")}</div><div class="fb" aria-live="polite"></div></div>`}
@@ -306,7 +314,7 @@ $("#mods").innerHTML=M.map((m,i)=>{const et=ETAPAS.find(e=>e.id===m.etapa);retur
 ${m.gob?`<div class="box gob"><b>En la Gobernación.</b> ${m.gob}</div>`:""}
 ${m.err?`<div class="box warn"><b>Error frecuente.</b> ${m.err}</div>`:""}
 ${m.caso?`<details><summary>Ejemplo resuelto: ${m.caso.t}</summary><p>${m.caso.p}</p><p><b>Respuesta sugerida.</b> ${m.caso.r}</p></details>`:""}
-<div class="quiz" data-m="${i}"><h4>Compruebe lo aprendido (${m.quiz.length} preguntas)</h4>${m.quiz.map((q,j)=>qHTML(q,`m${i}q${j}`,j+1)).join("")}</div>
+<div class="quiz" data-m="${i}"><h4>Compruebe lo aprendido (${m.quiz.length} preguntas)</h4>${m.quiz.map((q,j)=>qHTML(q,`${m.id}-q${j}`,j+1)).join("")}</div>
 <div class="done-row"><button class="btn" data-done="${m.id}" type="button">Marcar como completado</button><span class="meta" data-falta="${m.id}"></span>${i<M.length-1?`<a href="#${M[i+1].id}">Siguiente: ${M[i+1].t}</a>`:`<a href="#casos">Ir al taller de casos</a>`}</div>
 </section>`}).join("");
 
@@ -320,7 +328,7 @@ if(!U)return abrirLogin();
 const store=k.startsWith("m")?U.prac:U.casos;
 if(store[k])return;
 const o=+b.dataset.o;store[k]={o,ok:o===q.a,t:Date.now()};save();pintarRespuesta(el,q,o);refresh();
-if(!k.startsWith("m")&&CASOQ.every(x=>U.casos[x.k])&&U.orden)enviar("taller");
+if(!k.startsWith("m")&&tallerCompleto())enviar("taller");
 }));
 });
 }
@@ -329,11 +337,27 @@ bindPractica();
 document.querySelectorAll("[data-done]").forEach(b=>b.addEventListener("click",()=>{
 if(!U)return abrirLogin();
 const id=b.dataset.done,i=M.findIndex(m=>m.id===id);
-const falt=M[i].quiz.filter((q,j)=>!U.prac[`m${i}q${j}`]).length;
+const falt=M[i].quiz.filter((q,j)=>!U.prac[`${M[i].id}-q${j}`]).length;
 if(falt&&!U.done[id]){document.querySelector(`[data-falta="${id}"]`).textContent=`Responda las ${falt} pregunta(s) pendientes para completar el módulo.`;return}
 U.done[id]=U.done[id]?0:Date.now();if(!U.done[id])delete U.done[id];save();refresh();
 if(U.done[id])enviar("modulo",{modulo:id});
 }));
+
+/* ---------- cuadro comparativo ---------- */
+function pintarComp(){
+const g=U&&U.comp?U.comp:null;
+$("#compTabla").innerHTML=`<thead><tr><th>Característica</th><th>Modalidad</th></tr></thead><tbody>${COMP.rows.map((r,i)=>{const v=g?g.r[i]:"";const cls=g?(v===r.a?"ok":"no"):"";return `<tr class="${cls}"><td>${r.t}</td><td><select data-c="${i}" aria-label="Modalidad para: ${esc(r.t)}"${g?" disabled":""}><option value="">Seleccione…</option>${COMP.cols.map((c,j)=>`<option value="${j}"${v===j?" selected":""}>${c}</option>`).join("")}</select>${g&&v!==r.a?`<div class="meta">Correcta: <b>${COMP.cols[r.a]}</b>. ${r.e}</div>`:""}</td></tr>`}).join("")}</tbody>`;
+$("#compCheck").disabled=!!g;
+$("#compMsg").textContent=g?`Resultado: ${g.ok} de ${COMP.rows.length} filas correctas.`:"";
+}
+$("#compCheck").addEventListener("click",()=>{
+if(!U)return abrirLogin();
+if(U.comp)return;
+const r=[...document.querySelectorAll("#compTabla select")].map(s=>s.value===""?null:+s.value);
+if(r.some(v=>v===null)){$("#compMsg").textContent="Escoja una modalidad en todas las filas.";return}
+const ok=r.filter((v,i)=>v===COMP.rows[i].a).length;
+U.comp={r,ok,t:Date.now()};save();pintarComp();refresh();if(tallerCompleto())enviar("taller");
+});
 
 /* ---------- actividad de orden ---------- */
 let orden=[];
@@ -346,7 +370,7 @@ $("#orderList").querySelectorAll("[data-dn]").forEach(b=>b.addEventListener("cli
 $("#orderCheck").addEventListener("click",()=>{
 if(!U)return abrirLogin();
 const ok=orden.every((v,i)=>v===i);pintarOrden(true);
-if(!U.orden){U.orden={ok,t:Date.now()};save();refresh();if(CASOQ.every(x=>U.casos[x.k]))enviar("taller")}
+if(!U.orden){U.orden={ok,t:Date.now()};save();refresh();if(tallerCompleto())enviar("taller")}
 $("#orderMsg").textContent=(ok?"Orden correcto.":"Hay etapas fuera de lugar (en rojo).")+(U.orden.ok===ok?"":" Para la calificación cuenta su primer intento.");
 });
 
@@ -421,7 +445,7 @@ const box=$("#scoreBox");
 if(!U){box.innerHTML=`<div class="lock">Ingrese con su cédula para ver su calificación.</div>`;return}
 const r=resultado();
 const bar=(l,v,max,low)=>`<div class="rowb"><span>${l}</span><div class="t"><i class="${low?"low":""}" style="width:${Math.min(100,v/max*100)}%"></i></div><b>${max===100?nf(v)+" %":v+"/"+max}</b></div>`;
-const req=[[r.modulos===M.length,`14 módulos completados (${r.modulos})`],[r.tallerOk,"Taller de casos y actividad de orden completos"],[!!r.best,"Al menos una evaluación final presentada"],[r.I>=80,`Índice ≥ 80 (actual ${r.I.toLocaleString("es-CO")})`],[r.F>=80,`Evaluación final ≥ 80 % (mejor ${r.F.toLocaleString("es-CO")} %)`],[r.best&&r.minArea>=6,`Cada etapa ≥ 6 de 8 (más baja: ${r.best?r.minArea:0})`]];
+const req=[[r.modulos===M.length,`${M.length} módulos completados (${r.modulos})`],[r.tallerOk,"Taller de casos, actividad de orden y cuadro comparativo completos"],[!!r.best,"Al menos una evaluación final presentada"],[r.I>=80,`Índice ≥ 80 (actual ${r.I.toLocaleString("es-CO")})`],[r.F>=80,`Evaluación final ≥ 80 % (mejor ${r.F.toLocaleString("es-CO")} %)`],[r.best&&r.minArea>=6,`Cada etapa ≥ 6 de 8 (más baja: ${r.best?r.minArea:0})`]];
 box.innerHTML=`<div class="score"><div>
 <div class="meta">${esc(U.perfil.nombre)} · C.C. ${mask(U.perfil.cedula)} · ${esc(U.perfil.dependencia)}</div>
 <div class="big">${r.I.toLocaleString("es-CO")}</div><div class="meta">Índice de apropiación (0 a 100)</div>
@@ -445,6 +469,7 @@ document.querySelectorAll("[data-done]").forEach(b=>{const d=!!done[b.dataset.do
 drawRoute();if(!exam)pintarExamen();pintarCalificacion();
 }
 function pintarRespuestasGuardadas(){
+pintarComp();
 document.querySelectorAll("#mods .q, #casosList .q").forEach(el=>{
 const k=el.dataset.k;const isM=k.startsWith("m");const store=U?(isM?U.prac:U.casos):{};const q=isM?POOL.find(x=>x.k===k):CASOQ.find(x=>x.k===k);
 if(store[k])pintarRespuesta(el,q,store[k].o);
@@ -471,7 +496,7 @@ if(!dep)return err.textContent="Indique su dependencia.";
 if(!vin)return err.textContent="Seleccione su vinculación.";
 if(!$("#lOk").checked)return err.textContent="Debe aceptar la autorización de tratamiento de datos para continuar.";
 err.textContent="";
-U=load(ced)||{perfil:{},done:{},prac:{},casos:{},orden:null,finals:[]};
+U=load(ced)||{perfil:{},done:{},prac:{},casos:{},orden:null,comp:null,finals:[]};
 U.perfil={cedula:ced,nombre:nom.slice(0,120),dependencia:dep.slice(0,120),vinculacion:vin,consentimiento:U.perfil.consentimiento||new Date().toISOString()};
 save();ls.set("curso-ce-actual",ced);
 $("#login").hidden=true;pintarUsuario();pintarRespuestasGuardadas();refresh();enviar("ingreso");
@@ -528,7 +553,7 @@ $("#cCopy").addEventListener("click",async()=>{try{await navigator.clipboard.wri
 }
 
 /* ---------- arranque ---------- */
-nuevoOrden();
+nuevoOrden();pintarComp();
 const actual=ls.get("curso-ce-actual","");
 if(actual&&load(actual)){pintarUsuario();pintarRespuestasGuardadas();refresh();vaciar()}
 else{U=null;pintarUsuario();refresh();if(location.hash!=="#coordinador")abrirLogin()}
