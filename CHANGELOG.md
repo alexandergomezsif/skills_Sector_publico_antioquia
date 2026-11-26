@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## [1.4.0] — 2026-11-26
+
+- Nuevo **curso de contratación estatal** en `curso/`: 14 módulos, 86 preguntas, taller de 10 casos,
+  evaluación final de 40 preguntas con opciones barajadas, ingreso por cédula sin contraseña,
+  autorización de datos (Ley 1581), índice de apropiación (20 % práctica + 30 % casos + 50 % final),
+  niveles con requisitos por etapa, constancia con código de verificación y panel del coordinador.
+- Registro en Google Sheets con Apps Script (`curso/apps-script/Codigo.gs`): bloqueo concurrente,
+  saneamiento contra inyección de fórmulas, resumen por persona con el mejor resultado, clave de coordinador.
+- Memorias del curso en PDF (40 páginas) generadas desde la misma fuente (`curso/memorias.py`).
+
 ## [1.3.0] — 2026-11-25
 
 - Nueva skill **`secretaria-infraestructura-fisica`**: estructura y funciones oficiales de la SIF

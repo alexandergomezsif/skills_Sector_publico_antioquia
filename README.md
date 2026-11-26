@@ -77,6 +77,18 @@ versión en alta resolución y guárdela como `.claude/skills/marca-gobernacion/
 | `consultar_red_vial.py` | Malla vial R10 (ArcGIS): buscar vía, inventario municipal, km por subregión/estado, GeoJSON | `buscar "05282VT28"` · `municipio 05282 --salida vias.xlsx` |
 | `costo_frentes.py` | Costo de maquinaria por frente (equipos × días × tarifa), Excel con fórmulas | `--equipo MT 10 --equipo "VQ DT" 10 2` |
 
+## Curso de contratación estatal (`curso/`)
+
+Curso web autocontenido para servidores y contratistas nuevos: 14 módulos, 86 preguntas de práctica,
+taller de 10 casos, actividad de orden y evaluación final de 40 preguntas (8 por etapa). Ingreso solo
+con cédula (identifica el avance; no es autenticación), autorización Ley 1581 y calificación con
+índice de apropiación y cuatro niveles (Inicial, En desarrollo, Competente, Avanzado), constancia con
+código de verificación y panel del coordinador. Registro opcional en Google Sheets mediante Apps Script.
+
+- Abrir: `curso/index.html` (o GitHub Pages). Instalación del registro: `curso/INSTALACION.md`.
+- Memorias de estudio: `curso/Memorias-curso-contratacion-estatal.pdf` (regenerar con `python curso/memorias.py`).
+- Editar contenido en `curso/fuente/` y reconstruir con `python curso/build.py "<URL del Apps Script>"`.
+
 ## Puntos que deben confirmarse con la Gobernación
 
 Marcados como **[POR VERIFICAR]** en los archivos. Los principales:
