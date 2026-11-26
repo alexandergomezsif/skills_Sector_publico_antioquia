@@ -1,6 +1,6 @@
 # Curso de contratación estatal — instalación y administración
 
-Versión 2.1 (nov. 2026). Página estática (`index.html`) publicada en GitHub Pages + registro de
+Versión 2.1 (nov. 2026). Desarrollado por: **Alexander Gómez Avendaño**. Página estática (`index.html`) publicada en GitHub Pages + registro de
 calificaciones en una hoja de Google mediante Apps Script.
 
 ## 1. Crear el registro en Google Sheets (una sola vez, 10 minutos)

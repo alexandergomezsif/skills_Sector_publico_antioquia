@@ -86,12 +86,13 @@ __CSS__
 <section class="hero"><div class="wrap herogrid"><div>
 <h1>Curso de contratación estatal desde cero</h1>
 <p>Para servidores y contratistas de la Gobernación de Antioquia. Recorra la vida de un contrato público, desde la necesidad hasta la liquidación, resuelva casos reales y demuestre su nivel en la evaluación final.</p>
+<p class="autor">Desarrollado por: <b>Alexander Gómez Avendaño</b></p>
 <div class="facts" id="facts"></div>
 </div>
 <ol class="how">
 <li><span><b>Ingrese con su cédula.</b> Su avance y sus respuestas quedan asociados a usted.</span></li>
 <li><span><b>Estudie los __NMOD__ módulos.</b> Cada uno se completa al responder todas sus preguntas; cuenta la primera respuesta.</span></li>
-<li><span><b>Resuelva el taller de casos.</b> Diez situaciones reales de la Gobernación.</span></li>
+<li><span><b>Resuelva el taller de casos.</b> __NCASOS__ situaciones de la Gobernación y un cuadro comparativo de modalidades.</span></li>
 <li><span><b>Presente la evaluación final.</b> 40 preguntas, 8 por cada etapa. Su nivel aparece en "Mi calificación".</span></li>
 </ol>
 </div></section>
@@ -207,6 +208,7 @@ __CSS__
 <footer><div class="wrap">
 <p><b>Aviso.</b> Material de autoestudio elaborado con asistencia de IA a partir de normas verificadas a noviembre de 2026. No es un concepto jurídico ni reemplaza a la Secretaría General, a la Dirección de Asuntos Legales ni al Manual de Contratación del Departamento. Antes de decidir, verifique el texto vigente de cada norma en SUIN-Juriscol, Función Pública o la relatoría de Colombia Compra Eficiente.</p>
 <p><b>Fuentes principales:</b> Ley 80 de 1993; Ley 1150 de 2007; Ley 1474 de 2011; Ley 1882 de 2018; Ley 2022 de 2020; Ley 996 de 2005; Ley 1682 de 2013; Decreto 1082 de 2015 y Decretos 287 y 0997 de 2026; Decreto Legislativo 1420 de 2026; guías y conceptos de Colombia Compra Eficiente; Manual de Contratación del Departamento; datos abiertos de SECOP II.</p>
+<p class="autor">Desarrollado por: <b>Alexander Gómez Avendaño</b></p>
 <p>Gobernación de Antioquia · uso interno · versión __VERSION__ · <a href="#coordinador">Panel de la coordinación</a></p>
 </div></footer>
 
@@ -455,7 +457,7 @@ box.innerHTML=`<div class="score"><div>
 <h3 style="margin-top:0">Componentes</h3><div class="rows">${bar("Práctica de módulos (20 %)",r.P,100)}${bar("Taller de casos (30 %)",r.C,100)}${bar("Evaluación final (50 %)",r.F,100)}</div>
 <h3>Evaluación final por etapa (mejor intento)</h3><div class="rows">${ETAPAS.map(e=>bar(e.n,r.best?(r.areas[e.id]??0):0,8,r.best&&(r.areas[e.id]??0)<6)).join("")}</div>
 </div></div>
-${(r.nivel==="Competente"||r.nivel==="Avanzado")?`<div class="cert"><h3>Constancia de aprobación — nivel ${r.nivel}</h3><p>${esc(U.perfil.nombre)}, identificado(a) con cédula terminada en ${esc(String(U.perfil.cedula).slice(-4))}, de ${esc(U.perfil.dependencia)}, completó el Curso de contratación estatal desde cero (corte normativo nov. 2026) con un índice de apropiación de ${r.I.toLocaleString("es-CO")} y evaluación final de ${nf(r.F)} %, el ${new Date(r.best.t).toLocaleDateString("es-CO",{day:"numeric",month:"long",year:"numeric"})}.</p><p>Código de verificación: <span class="code">${r.codigo}</span></p><p class="meta">Constancia de formación interna. No es una certificación de idoneidad ni de competencias laborales.</p><button class="btn alt noprint" type="button" id="printC">Imprimir o guardar en PDF</button></div>`:""}`;
+${(r.nivel==="Competente"||r.nivel==="Avanzado")?`<div class="cert"><h3>Constancia de aprobación — nivel ${r.nivel}</h3><p>${esc(U.perfil.nombre)}, identificado(a) con cédula terminada en ${esc(String(U.perfil.cedula).slice(-4))}, de ${esc(U.perfil.dependencia)}, completó el Curso de contratación estatal desde cero (corte normativo nov. 2026) con un índice de apropiación de ${r.I.toLocaleString("es-CO")} y evaluación final de ${nf(r.F)} %, el ${new Date(r.best.t).toLocaleDateString("es-CO",{day:"numeric",month:"long",year:"numeric"})}.</p><p>Código de verificación: <span class="code">${r.codigo}</span></p><p class="meta">Constancia de formación interna. No es una certificación de idoneidad ni de competencias laborales. Curso desarrollado por Alexander Gómez Avendaño.</p><button class="btn alt noprint" type="button" id="printC">Imprimir o guardar en PDF</button></div>`:""}`;
 const pc=$("#printC");if(pc)pc.addEventListener("click",()=>{try{window.print()}catch(e){}});
 }
 

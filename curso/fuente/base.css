@@ -122,3 +122,6 @@ table.comp select{width:100%;min-height:40px;font:inherit;padding:6px 8px;border
 table.comp tr.ok td{background:#e8f5ec}
 table.comp tr.no td{background:#fdecea}
 table.comp .meta{margin-top:6px}
+/* crédito de autoría */
+.hero .autor{margin:10px 0 0;font-size:.95rem;opacity:.95}
+footer .autor{margin-bottom:6px}
