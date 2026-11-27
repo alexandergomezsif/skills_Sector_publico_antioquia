@@ -11,6 +11,12 @@ Versión 2.1 (nov. 2026). Desarrollado por: **Alexander Gómez Avendaño**.
 - La clave del panel de coordinación la generó el propio script (`generarClaveCoordinador`). Consúltela en
   Apps Script > Configuración del proyecto > Propiedades del script > `CLAVE_COORDINADOR`. No la publique.
 - Curso en línea: https://alexandergomezsif.github.io/skills_Sector_publico_antioquia/curso/
+- Inscripción con correo verificado (versión 2 de la implementación, 27-nov-2026): la página pide un código de 6 dígitos
+  que el script envía por correo con un mensaje de bienvenida (MailApp, cupo aproximado de 100 correos al día en
+  Gmail gratuito). La pestaña **Inscritos** lista a cada persona con su estado (pendiente o verificado). Los eventos sin
+  token de sesión válido se rechazan.
+- Si cambia el código del script: Implementar > Administrar implementaciones > editar (lápiz) > Versión: Nueva versión >
+  Implementar. La dirección no cambia.
 - Pendiente recomendado: pasar la hoja a una cuenta institucional de la Gobernación (Ley 1581 de 2012).
  Página estática (`index.html`) publicada en GitHub Pages + registro de
 calificaciones en una hoja de Google mediante Apps Script.
