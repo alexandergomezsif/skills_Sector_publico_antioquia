@@ -65,7 +65,7 @@ partes.append(f"""
 <div class="band"><p class="meta" style="color:#bfe3cf">Memorias del curso · formación interna</p>
 <h1>Curso de contratación estatal desde cero</h1>
 <p>Guía de estudio para servidores y contratistas de la Gobernación de Antioquia: la vida de un contrato público, desde la necesidad hasta la liquidación.</p>
-<p style="margin-top:14pt">Versión 2.1 · corte normativo: noviembre de 2026</p>
+<p style="margin-top:14pt">Versión 3.0 · corte normativo: noviembre de 2026</p>
 <p style="margin-top:18pt;font-size:13pt;color:#fff">Desarrollado por: <b>Alexander Gómez Avendaño</b></p></div>
 <div class="meta">Material de autoestudio elaborado con asistencia de IA a partir de normas verificadas a noviembre de 2026. No es un concepto jurídico ni reemplaza a la Secretaría General, a la Dirección de Asuntos Legales ni al Manual de Contratación del Departamento. Verifique el texto vigente de cada norma antes de decidir.</div>
 </section>""")
@@ -78,7 +78,7 @@ partes.append(f"""
 <p>Anexos: taller de casos · cuadro comparativo de modalidades · las etapas de una licitación · plazos frecuentes · glosario · fuentes.</p>
 </section><section class="mod"><h2>Cómo usar estas memorias</h2>
 <ol>
-<li>Lea los módulos en orden: siguen la ruta de un contrato (bases, planeación, selección, celebración y ejecución, cierre).</li>
+<li>Estudie los módulos en orden: siguen la ruta de un contrato. En el aula virtual cada módulo se habilita cuando aprueba el anterior (lección leída completa y al menos 70 % en su evaluación, con refuerzo si hace falta).</li>
 <li>Al final de cada módulo responda las preguntas de repaso en la página del curso. Cuenta la primera respuesta.</li>
 <li>Resuelva el taller de casos y luego presente la evaluación final (40 preguntas, 8 por etapa).</li>
 </ol>
@@ -133,7 +133,7 @@ async def pdf():
         pg = await b.new_page()
         await pg.goto((AQUI / 'memorias.html').as_uri())
         await pg.wait_for_timeout(1500)
-        foot = "<div style='font-family:Arial;font-size:7.5pt;color:#5b6b64;width:100%;padding:0 20mm;display:flex;justify-content:space-between'><span>Curso de contratación estatal desde cero · Desarrollado por Alexander Gómez Avendaño · v2.1 nov. 2026</span><span>Página <span class='pageNumber'></span> de <span class='totalPages'></span></span></div>"
+        foot = "<div style='font-family:Arial;font-size:7.5pt;color:#5b6b64;width:100%;padding:0 20mm;display:flex;justify-content:space-between'><span>Curso de contratación estatal desde cero · Desarrollado por Alexander Gómez Avendaño · v3.0 nov. 2026</span><span>Página <span class='pageNumber'></span> de <span class='totalPages'></span></span></div>"
         await pg.pdf(path=str(AQUI / 'Memorias-curso-contratacion-estatal.pdf'), format='Letter', print_background=True,
                      display_header_footer=True, header_template="<div></div>", footer_template=foot,
                      margin={"top": "20mm", "bottom": "18mm", "left": "20mm", "right": "20mm"})

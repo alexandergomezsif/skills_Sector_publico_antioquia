@@ -1,5 +1,17 @@
 # Registro de cambios
 
+## [1.6.0] — 2026-11-27
+
+Curso de contratación estatal 3.0: **aula virtual**.
+- Cada módulo en su propia página (`#/modulo/mX`), con menú lateral de contenido, candados, avance y migas de pan;
+  en celular el menú se abre como panel lateral.
+- Secuencia obligatoria: un módulo se aprueba al leer la lección hasta el final y obtener al menos 70 % en su
+  evaluación; si no lo alcanza presenta un refuerzo (habilita el avance, no cambia la nota del primer intento).
+  El taller se habilita con los 15 módulos aprobados y la evaluación final con el taller completo.
+- Portada con "continuar donde quedó", ruta del contrato y tarjetas de módulo con su estado; notas por módulo en
+  "Mi calificación"; aviso antes de abandonar una evaluación final en curso.
+- Registro en Google Sheets conectado (`curso/endpoint.txt`); clave de coordinación generada por el script.
+
 ## [1.5.0] — 2026-11-26
 
 Curso de contratación estatal, versión 2.1, tras contrastarlo con el material de un diplomado externo

@@ -81,7 +81,7 @@ versión en alta resolución y guárdela como `.claude/skills/marca-gobernacion/
 
 Desarrollado por: **Alexander Gómez Avendaño**.
 
-Curso web autocontenido para servidores y contratistas nuevos: 15 módulos, 103 preguntas de práctica,
+Aula virtual autocontenida para servidores y contratistas nuevos (cada módulo en su página; el siguiente se habilita al aprobar el anterior con 70 %): 15 módulos, 103 preguntas de práctica,
 taller de 14 casos, cuadro comparativo de modalidades, actividad de orden y evaluación final de 40 preguntas (8 por etapa). Ingreso solo
 con cédula (identifica el avance; no es autenticación), autorización Ley 1581 y calificación con
 índice de apropiación y cuatro niveles (Inicial, En desarrollo, Competente, Avanzado), constancia con

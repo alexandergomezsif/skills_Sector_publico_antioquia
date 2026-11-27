@@ -244,7 +244,7 @@ GLOSARIO_NUEVO = [
  ("Reversión", "Paso a la entidad, sin compensación, de los bienes vinculados a un contrato de explotación o concesión al terminar el plazo (Ley 80, art. 19)."),
 ]
 
-VERSION = "2.1 (nov. 2026)"
+VERSION = "3.0 (nov. 2026)"
 
 
 def armar():
