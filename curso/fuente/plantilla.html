@@ -170,6 +170,9 @@ footer .wrap{max-width:none;padding:22px clamp(16px,3.4vw,48px)}
 }
 @media(prefers-reduced-motion:reduce){aside.side,.prog .pb i{transition:none}}
 @media print{header.top,aside.side,.overlay,footer,.noprint,.view:not(#v-calificacion){display:none!important}#v-calificacion{display:block!important}.app{display:block}body{background:#fff}}
+.programa h2{font-size:20px;color:var(--green-ink);margin:22px 0 6px}.programa details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0}.programa summary{cursor:pointer;font-weight:600}
+.matEt{display:flex;align-items:center;gap:10px;font-size:18px;margin:26px 4px 10px}.matEt i{width:12px;height:12px;border-radius:50%}
+.matCard{border-left:5px solid var(--c)}.matCard h4{margin:14px 0 4px;font-size:15px}.matCard ul{margin:4px 0 0;padding-left:20px}.matCard li{margin:4px 0}.matAcc{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:12px 0 0}.matCard .pill svg{width:12px;height:12px;vertical-align:-1px}
 </style>
 </head>
 <body>
@@ -311,6 +314,19 @@ footer .wrap{max-width:none;padding:22px clamp(16px,3.4vw,48px)}
 </div></section>
 
 <!-- ============ RECURSOS ============ -->
+<section class="view" id="v-programa" hidden><div class="col">
+<div class="crumbs"><a href="#/inicio">Inicio</a> › Programa del curso</div>
+<div class="card programa" id="progBox"></div>
+</div></section>
+
+<section class="view" id="v-material" hidden><div class="col">
+<div class="crumbs"><a href="#/inicio">Inicio</a> › Material por módulo</div>
+<div class="card"><h1 style="font-size:clamp(26px,3.4vw,38px);color:var(--green-ink);margin:0 0 6px">Material por módulo</h1>
+<p>Para cada módulo: la memoria en PDF para leer o imprimir, las normas que conviene consultar (texto oficial en el Gestor Normativo de Función Pública) y las guías de Colombia Compra Eficiente. El material se puede consultar aunque el módulo aún esté bloqueado.</p>
+<p class="meta">Los artículos indicados orientan la lectura. Verifique siempre el texto vigente en la fuente oficial. <a href="Memorias-curso-contratacion-estatal.pdf" target="_blank" rel="noopener">Descargar las memorias completas (PDF)</a></p></div>
+<div id="matBox"></div>
+</div></section>
+
 <section class="view" id="v-recursos" hidden><div class="col">
 <div class="crumbs"><a href="#/inicio">Inicio</a> › Recursos de consulta</div>
 <div class="card">
@@ -394,6 +410,7 @@ const ORDEN=__ORDEN__;
 const GLOS=__GLOSARIO__;
 const PLAZOS=__PLAZOS__;
 const COMP=__COMP__;
+const MAT=__MATERIAL__;
 
 const $=s=>document.querySelector(s);
 const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -493,6 +510,7 @@ function pintarMenu(ruta){
 const ok=i=>aprobado(i),op=i=>abierto(i);
 const item=(href,ic,txt,cls)=>`<a href="${href}" class="${cls}"${cls.includes("cur")?' aria-current="page"':""}><span class="ic">${ic}</span><span>${txt}</span></a>`;
 let h=item("#/inicio",`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg>`,"Inicio",ruta.v==="inicio"?"cur open":"open");
+h+=item("#/programa","i","Programa del curso","open"+(ruta.v==="programa"?" cur":""));
 ETAPAS.forEach(e=>{h+=`<div class="grp"><i style="background:${e.c}"></i>${e.n}</div>`;
 M.forEach((m,i)=>{if(m.etapa!==e.id)return;const st=ok(i)?"ok":op(i)?"open":"bloq";
 h+=item(`#/modulo/${m.id}`,ok(i)?"✓":st==="bloq"?ICO_LOCK:String(i+1),`${i+1}. ${m.c}`,st+(ruta.v==="modulo"&&ruta.id===m.id?" cur":""))})});
@@ -502,6 +520,7 @@ h+=item("#/taller",tallerCompleto()?"✓":tOk?"T":ICO_LOCK,"Taller de casos",(ta
 h+=item("#/evaluacion",r.best?"✓":(tOk&&tallerCompleto())?"E":ICO_LOCK,"Evaluación final",(r.best?"ok":(tOk&&tallerCompleto())?"open":"bloq")+(ruta.v==="evaluacion"?" cur":""));
 h+=item("#/calificacion","★","Mi calificación","open"+(ruta.v==="calificacion"?" cur":""));
 h+=`<div class="grp"><i style="background:var(--ink2)"></i>Consulta</div>`;
+h+=item("#/material","§","Material por módulo","open"+(ruta.v==="material"?" cur":""));
 h+=item("#/recursos","?","Herramientas y glosario","open"+(ruta.v==="recursos"?" cur":""));
 $("#menu").innerHTML=h;
 const c=M.filter((m,i)=>aprobado(i)).length;
@@ -554,7 +573,7 @@ v.innerHTML=`<div class="readbar noprint" aria-hidden="true"><i id="rbar"></i></
 <div class="card mhead" style="--c:${et.c}">
 <span class="kicker"><i style="background:${et.c}"></i>${et.n} · Módulo ${i+1}</span>
 <h1>${m.t}</h1>
-<div class="meta">${m.min} minutos de estudio · ${m.quiz.length} preguntas · aprobación con ${APROB} %</div>
+<div class="meta">${m.min} minutos de estudio · ${m.quiz.length} preguntas · aprobación con ${APROB} % · <a href="#/material/${m.id}">Normas y memoria del módulo</a></div>
 <div class="steps" id="steps"></div>
 </div>
 <article class="card lesson" id="leccion">
@@ -751,9 +770,54 @@ ${(r.nivel==="Competente"||r.nivel==="Avanzado")?`<div class="cert"><h3>Constanc
 const pc=$("#printC");if(pc)pc.addEventListener("click",()=>{try{window.print()}catch(e){}});
 }
 
+/* ---------- programa del curso ---------- */
+function pintarPrograma(){
+const tot=M.reduce((a,m)=>a+m.min,0);
+const filas=ETAPAS.map(e=>{const ms=M.map((m,i)=>[m,i]).filter(x=>x[0].etapa===e.id);
+ return ms.map(([m,i],k)=>`<tr>${k===0?`<td rowspan="${ms.length}"><b>${e.n}</b></td>`:""}<td>${i+1}. ${esc(m.t)}</td><td class="n">${m.min} min</td></tr>`).join("")}).join("");
+$("#progBox").innerHTML=`<h1 style="font-size:clamp(26px,3.4vw,38px);color:var(--green-ink);margin:0 0 6px">Programa del curso</h1>
+<p class="meta">Versión ${esc(CONFIG.VERSION)} · formación interna de la Gobernación de Antioquia · Desarrollado por: Alexander Gómez Avendaño</p>
+<h2>Propósito</h2>
+<p>Que servidores y contratistas que llegan a la Gobernación entiendan cómo nace, se ejecuta y se cierra un contrato público, qué norma aplica en cada paso y qué errores evitar, para trabajar con los equipos de contratación, supervisión y asuntos legales.</p>
+<h2>A quién va dirigido</h2>
+<p>Personas sin formación previa en contratación estatal: profesionales técnicos, apoyos a la supervisión, equipos de estructuración y personal administrativo. No exige ser abogado.</p>
+<h2>Contenido</h2>
+<div class="scroll"><table><thead><tr><th>Etapa</th><th>Módulo</th><th>Estudio</th></tr></thead><tbody>${filas}
+<tr><td><b>Cierre del curso</b></td><td>Taller de casos (${CASOS.length} casos, cuadro comparativo y actividad de orden) · Evaluación final (40 preguntas)</td><td class="n">—</td></tr></tbody></table></div>
+<p class="meta">Tiempo de estudio de los módulos: ${(Math.round(tot/6)/10).toLocaleString("es-CO")} horas, a su propio ritmo.</p>
+<h2>Cómo se avanza</h2>
+<ol>
+<li>Cada módulo se abre cuando aprueba el anterior.</li>
+<li>Un módulo se aprueba al leer la lección hasta el final y obtener al menos ${APROB} % en su evaluación. Si no lo alcanza, presenta un refuerzo: le permite avanzar, pero la nota que cuenta es la del primer intento.</li>
+<li>El taller se habilita con los ${M.length} módulos aprobados, y la evaluación final con el taller completo.</li>
+<li>Su avance se guarda en este navegador y en el registro del curso. Puede salir y volver cuando quiera.</li>
+</ol>
+<h2>Cómo se califica</h2>
+<p><b>Índice de apropiación</b> = 20 % práctica de módulos + 30 % taller de casos + 50 % mejor evaluación final. El detalle de niveles está en <a href="#/calificacion">Mi calificación</a>. Con nivel Competente o Avanzado se genera una constancia con código de verificación.</p>
+<h2>Preguntas frecuentes</h2>
+<details><summary>Cambié de computador o de navegador. ¿Cómo entro?</summary><p>Escriba su cédula y su correo en "Ingresar". Le llegará de nuevo el correo con el botón <b>Entrar al curso</b>. No necesita una nueva aprobación.</p></details>
+<details><summary>No me llegó el correo de bienvenida.</summary><p>Revise la carpeta de spam o correo no deseado y márquelo como "No es spam". Si su inscripción aún no ha sido aprobada, el correo llegará cuando la coordinación la apruebe.</p></details>
+<details><summary>¿Pierdo el avance si cierro la página?</summary><p>No. Cada módulo aprobado, el taller y las evaluaciones quedan guardados. Al volver, la portada le muestra dónde continuar.</p></details>
+<details><summary>Reprobé la evaluación final. ¿Puedo repetirla?</summary><p>Sí. Cuenta el mejor intento. Revise antes las etapas con menor resultado en "Mi calificación".</p></details>
+<details><summary>¿A quién le pregunto una duda del contenido?</summary><p>Responda el correo de bienvenida: llega a la coordinación del curso.</p></details>
+<p class="meta" style="margin-top:18px">Material de formación. No es un concepto jurídico ni reemplaza a la Secretaría General, a la Dirección de Asuntos Legales ni al Manual de Contratación del Departamento.</p>`;
+}
+
+/* ---------- material por módulo ---------- */
+function pintarMaterial(){
+$("#matBox").innerHTML=ETAPAS.map(e=>`<h2 class="matEt"><i style="background:${e.c}"></i>${e.n}</h2>`+M.map((m,i)=>{if(m.etapa!==e.id)return"";const d=MAT[m.id]||{normas:[],guias:[]};
+ const st=aprobado(i)?`<span class="pill ok">✓ Aprobado</span>`:abierto(i)&&U?`<span class="pill">Disponible</span>`:`<span class="pill">${ICO_LOCK} Bloqueado</span>`;
+ return `<div class="card matCard" id="mat-${m.id}" style="--c:${e.c}"><div class="qhead"><h3 style="margin:0">${i+1}. ${esc(m.t)}</h3>${st}</div>
+<p class="matAcc"><a class="btn alt" href="memorias/modulo-${String(i+1).padStart(2,"0")}.pdf" target="_blank" rel="noopener">Memoria del módulo (PDF)</a> <a href="#/modulo/${m.id}">Ir a la lección</a></p>
+<h4>Normas para consultar</h4><ul>${d.normas.map(n=>`<li><a href="${n[2]}" target="_blank" rel="noopener">${esc(n[0])}</a> — ${esc(n[1])}${n[3]?`. <span class="meta">Lea: ${esc(n[3])}.</span>`:""}</li>`).join("")}</ul>
+<h4>Guías y herramientas</h4><ul>${d.guias.map(g=>`<li><a href="${g[1]}" target="_blank" rel="noopener">${esc(g[0])}</a></li>`).join("")}</ul></div>`}).join("")).join("");
+}
+
 /* ---------- enrutador ---------- */
 function ruta(){const h=location.hash.replace(/^#\/?/,"");const p=h.split("/");
 if(p[0]==="modulo"&&p[1])return {v:"modulo",id:p[1]};
+if(p[0]==="material")return {v:"material",id:p[1]||""};
+if(p[0]==="programa")return {v:"programa"};
 if(["taller","evaluacion","calificacion","recursos","coordinador","inicio"].includes(p[0]))return {v:p[0]};
 if(h==="coordinador")return {v:"coordinador"};
 if(M.some(m=>m.id===h))return {v:"modulo",id:h};
@@ -767,6 +831,8 @@ else if(r.v==="modulo")pintarModulo(r.id);
 else if(r.v==="taller")pintarTaller();
 else if(r.v==="evaluacion")pintarExamen();
 else if(r.v==="calificacion")pintarCalificacion();
+else if(r.v==="programa")pintarPrograma();
+else if(r.v==="material"){pintarMaterial();if(r.id){const el=document.getElementById("mat-"+r.id);if(el){setTimeout(()=>el.scrollIntoView({block:"start"}),0);scroll=false}}}
 document.body.classList.remove("menuOpen");$("#menuBtn").setAttribute("aria-expanded","false");
 if(scroll!==false){scrollTo({top:0,behavior:"auto"});$("#main").focus({preventScroll:true})}
 }

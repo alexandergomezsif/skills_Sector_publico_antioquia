@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## [1.8.0] — 2026-11-27
+
+Curso de contratación estatal: menú del aula ampliado solo con lo que se usa.
+- **Programa del curso**: propósito, público, contenido por etapa con tiempos, cómo se avanza, cómo se califica y
+  preguntas frecuentes (ingreso desde otro equipo, correo que no llega, repetir la evaluación, a quién preguntar).
+- **Material por módulo**: memoria en PDF de cada módulo (`curso/memorias/modulo-NN.pdf`), normas con enlace al
+  Gestor Normativo de Función Pública (enlaces verificados el 27-nov-2026) y guías de Colombia Compra Eficiente;
+  acceso directo desde cada lección.
+- Se descartaron foro, participantes, calendario, anuncios e insignias por no aportar a un curso individual a ritmo propio.
+
 ## [1.7.0] — 2026-11-27
 
 Curso de contratación estatal: **inscripción con aprobación de la coordinación** (versión piloto, en pruebas).

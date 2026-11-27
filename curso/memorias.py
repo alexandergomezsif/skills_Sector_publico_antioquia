@@ -92,9 +92,10 @@ partes.append(f"""
 <p class="meta">El nivel mide la apropiación del contenido del curso. No acredita idoneidad legal ni reemplaza la evaluación de competencias laborales o del desempeño que corresponde a Talento Humano.</p>
 </section>""")
 
+mod_html = []
 for i, m in enumerate(mods):
     h = strip_stack(m["html"])
-    partes.append(f"""<section class="mod" id="{m['id']}">
+    mod_html.append(f"""<section class="mod" id="{m['id']}">
 <p class="meta">Módulo {i+1} · {EN[m['etapa']]} · {m['min']} minutos</p>
 <h2>{m['t']}</h2>
 <div class="obj"><b>Al terminar podrá:</b> {m['obj']}</div>
@@ -104,6 +105,7 @@ for i, m in enumerate(mods):
 {f"<div class='box'><b>Ejemplo resuelto: {m['caso']['t']}.</b> {m['caso']['p']}<br><b>Respuesta sugerida.</b> {m['caso']['r']}</div>" if m.get('caso') else ''}
 {preguntas(m)}
 </section>""")
+    partes.append(mod_html[-1])
 
 casos = "".join(
     f"<div class='caso'><p class='meta'>Caso {n+1} · {EN[c['area']]}</p><h3 style='margin-top:0'>{c['t']}</h3><p>{c['s']}</p><ol>"
@@ -137,6 +139,19 @@ async def pdf():
         await pg.pdf(path=str(AQUI / 'Memorias-curso-contratacion-estatal.pdf'), format='Letter', print_background=True,
                      display_header_footer=True, header_template="<div></div>", footer_template=foot,
                      margin={"top": "20mm", "bottom": "18mm", "left": "20mm", "right": "20mm"})
+        # memoria por módulo: un PDF por lección (enlazado desde "Material por módulo")
+        (AQUI / 'memorias').mkdir(exist_ok=True)
+        cab = f"<div style='display:flex;align-items:center;gap:12pt;border-bottom:1.5pt solid #0b5640;padding-bottom:8pt;margin-bottom:14pt'><img src='data:image/png;base64,{ESCUDO}' width='90' height='40' alt='Escudo de Antioquia'><div><b style='color:#0b5640'>Curso de contratación estatal desde cero</b><br><span class='meta'>Memoria del módulo · versión 3.0 · corte normativo nov. 2026</span></div></div>"
+        for i, sec in enumerate(mod_html):
+            doc = f"<!DOCTYPE html><html lang='es'><head><meta charset='utf-8'><title>Módulo {i+1}</title><link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap'><style>{css}.mod{{page-break-before:auto}}</style></head><body>{cab}{sec}</body></html>"
+            tmp = AQUI / 'memorias' / '_tmp.html'
+            tmp.write_text(doc, encoding='utf-8')
+            await pg.goto(tmp.as_uri()); await pg.wait_for_timeout(600)
+            pie = foot.replace('v3.0 nov. 2026', f'Módulo {i+1} · v3.0 nov. 2026')
+            await pg.pdf(path=str(AQUI / 'memorias' / f'modulo-{i+1:02d}.pdf'), format='Letter', print_background=True,
+                         display_header_footer=True, header_template="<div></div>", footer_template=pie,
+                         margin={"top": "18mm", "bottom": "18mm", "left": "20mm", "right": "20mm"})
+        (AQUI / 'memorias' / '_tmp.html').unlink()
         await b.close()
 asyncio.run(pdf())
 print("ok")

@@ -5,6 +5,7 @@ sys.path.insert(0,str(AQUI/'fuente'))
 from contenido import GLOSARIO,PLAZOS
 from contenido2 import CASOS as CASOS_BASE,ORDEN_LICITACION
 from contenido3 import armar,CASOS_NUEVOS,COMPARATIVO,GLOSARIO_NUEVO,VERSION
+from material import para_pagina
 ENDPOINT=sys.argv[1] if len(sys.argv)>1 else ((AQUI/"endpoint.txt").read_text().strip() if (AQUI/"endpoint.txt").exists() else "")
 mods=armar()
 CASOS=CASOS_BASE+CASOS_NUEVOS
@@ -24,7 +25,7 @@ J=lambda o:json.dumps(o,ensure_ascii=False).replace("</","<\\/")
 t=open(AQUI/'fuente'/'plantilla.html',encoding='utf-8').read()
 css=open(AQUI/'fuente'/'base.css',encoding='utf-8').read()
 esc=base64.b64encode(open(AQUI.parent/'.claude'/'skills'/'marca-gobernacion'/'assets'/'escudo'/'escudo-color-pantalla.png','rb').read()).decode()
-for k,v in {"__CSS__":css,"__ESCUDO__":esc,"__MODULOS__":J(mods),"__CASOS__":J(CASOS),"__ORDEN__":J(ORDEN_LICITACION),"__GLOSARIO__":J(GLOS),"__COMP__":J(COMPARATIVO),"__NMOD__":str(len(mods)),"__NCASOS__":str(len(CASOS)),"__APROB__":"70","__ULTIMO__":mods[-1]["id"],"__PLAZOS__":J(PLAZOS),"__ENDPOINT__":ENDPOINT,"__VERSION__":VERSION,"__NPREG__":str(sum(len(m["quiz"]) for m in mods))}.items():
+for k,v in {"__CSS__":css,"__ESCUDO__":esc,"__MODULOS__":J(mods),"__CASOS__":J(CASOS),"__ORDEN__":J(ORDEN_LICITACION),"__GLOSARIO__":J(GLOS),"__COMP__":J(COMPARATIVO),"__MATERIAL__":J(para_pagina([m["id"] for m in mods])),"__NMOD__":str(len(mods)),"__NCASOS__":str(len(CASOS)),"__APROB__":"70","__ULTIMO__":mods[-1]["id"],"__PLAZOS__":J(PLAZOS),"__ENDPOINT__":ENDPOINT,"__VERSION__":VERSION,"__NPREG__":str(sum(len(m["quiz"]) for m in mods))}.items():
     t=t.replace(k,v)
 assert "__" not in t.replace("__proto__","") or True
 open(AQUI/'index.html','w',encoding='utf-8').write(t)
