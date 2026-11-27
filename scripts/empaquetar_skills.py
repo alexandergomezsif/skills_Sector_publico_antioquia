@@ -32,7 +32,7 @@ Gobernación de Antioquia. Consulta según necesidad:
 - `contexto/mantenimiento.md` — qué actualizar y cuándo.
 
 Las demás skills (marca-gobernacion, informes-institucionales, presentaciones-institucionales,
-contratacion-estatal, derecho-publico-colombiano, analisis-datos-excel) se complementan con esta.
+contratacion-estatal, derecho-publico-colombiano, analisis-datos-excel, ingenieria-vial-obras, secretaria-infraestructura-fisica) se complementan con esta.
 """
 
 IGNORAR = shutil.ignore_patterns("__pycache__", "*.pyc", ".DS_Store")

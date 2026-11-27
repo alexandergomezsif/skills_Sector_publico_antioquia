@@ -58,6 +58,12 @@ Para producir el .docx de cualquiera, pasa el contenido a la skill `informes-ins
   python .claude/skills/contratacion-estatal/scripts/calcular_cuantias.py --anio 2026 --presupuesto-smmlv 5000000
   python .claude/skills/contratacion-estatal/scripts/calcular_cuantias.py --eleccion 2027-10-31
   ```
+- `scripts/consultar_secop.py` — contratos del Departamento en SECOP II (datos abiertos, jbjy-vk9h): resumen
+  por tipo y modalidad, búsqueda por objeto, detalle por referencia. No descarga cédulas ni cuentas.
+  ```bash
+  python .claude/skills/contratacion-estatal/scripts/consultar_secop.py resumen --infra --desde 2026-01-01
+  python .claude/skills/contratacion-estatal/scripts/consultar_secop.py buscar "interventoria" --tipo Interventoría --salida int.xlsx
+  ```
 - Días hábiles para plazos: `derecho-publico-colombiano/scripts/dias_habiles.py`.
 
 ## Referencias
@@ -69,6 +75,9 @@ Para producir el .docx de cualquiera, pasa el contenido a la skill `informes-ins
 - `references/novedades-2026.md` — cambios normativos 2026 con fechas de vigencia.
 - `references/ley-garantias.md` — restricciones electorales.
 - `references/documentos-tipo.md` — sectores, versiones y reglas de aplicación.
+- `references/contratacion-obra-infraestructura.md` — obra, interventoría y consultoría de infraestructura:
+  Documentos Tipo de transporte vigentes, interventoría obligatoria, anticipo y fiducia, garantía de
+  estabilidad, actas de obra, APU/AIU, datos de SECOP II y señales de alerta.
 
 ## Errores que debes detectar y señalar
 
@@ -82,3 +91,5 @@ Para producir el .docx de cualquiera, pasa el contenido a la skill `informes-ins
   (Decreto 1082, art. 2.2.1.1.1.7.1).
 - Exigir requisitos desproporcionados que restrinjan la competencia; no aplicar Documento Tipo obligatorio.
 - Omitir en pliegos las cláusulas y el pacto anticorrupción (Decreto 0997 de 2026, vigencia inmediata).
+- Obra licitada sin interventoría independiente; anticipo de obra licitada sin patrimonio autónomo;
+  garantía de estabilidad inferior a 5 años sin justificación (ver `contratacion-obra-infraestructura.md`).

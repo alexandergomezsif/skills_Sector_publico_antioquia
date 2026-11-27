@@ -1,0 +1,109 @@
+{
+  "fuente": "Hoja 'Listas' del Excel 'FRENTES ACTIVOS SEMANAL' (Secretaría de Infraestructura Física, 5-oct-2026)",
+  "moneda": "COP",
+  "horas_por_dia": 8,
+  "advertencia": "Tarifas de referencia del contrato de alquiler vigente en oct. 2026. Verificar contra el contrato y sus modificaciones antes de usarlas en actas o cuentas.",
+  "alias": {
+    "VQ SC": "VQ SENC",
+    "VQ Senc": "VQ SENC",
+    "VQ SENCILLA": "VQ SENC",
+    "BULL": "BULLD",
+    "BULLDOZER": "BULLD",
+    "MINI CARG": "MINIC",
+    "Mini C": "MINIC",
+    "CARGADOR": "CARG. FR",
+    "CARROTANQUE": "CARROT"
+  },
+  "equipos": [
+    {
+      "codigo": "MT",
+      "descripcion": "Motoniveladora 120k o similar",
+      "valor_hora": 289615.06,
+      "valor_dia_8h": 2316920.48
+    },
+    {
+      "codigo": "VB 7T",
+      "descripcion": "Vibrocompactador 7 Ton o similar",
+      "valor_hora": 185875.62,
+      "valor_dia_8h": 1487004.96
+    },
+    {
+      "codigo": "VB 10T",
+      "descripcion": "Vibrocompactador 10 Ton o similar",
+      "valor_hora": 227149.58,
+      "valor_dia_8h": 1817196.64
+    },
+    {
+      "codigo": "RT",
+      "descripcion": "Retroexcavadora sobre llanta (Pajarita)",
+      "valor_hora": 198879.94,
+      "valor_dia_8h": 1591039.52
+    },
+    {
+      "codigo": "BULLD",
+      "descripcion": "Bulldozer D5K o similar",
+      "valor_hora": 273013.37,
+      "valor_dia_8h": 2184106.96
+    },
+    {
+      "codigo": "EXC 8T",
+      "descripcion": "Excavadora sobre Oruga 6 - 8 Ton o similar",
+      "valor_hora": 182553.14,
+      "valor_dia_8h": 1460425.12
+    },
+    {
+      "codigo": "EXC 13T",
+      "descripcion": "Excavadora sobre Oruga 130 o similar",
+      "valor_hora": 257079.27,
+      "valor_dia_8h": 2056634.16
+    },
+    {
+      "codigo": "EXC 20T",
+      "descripcion": "Excavadora sobre Oruga 210 o similar",
+      "valor_hora": 332297.98,
+      "valor_dia_8h": 2658383.84
+    },
+    {
+      "codigo": "EXC 30T",
+      "descripcion": "Excavadora sobre Oruga 30 Ton o superior",
+      "valor_hora": 421276.66,
+      "valor_dia_8h": 3370213.28
+    },
+    {
+      "codigo": "VQ SENC",
+      "descripcion": "Volqueta Sencilla 7 m3",
+      "valor_hora": 155361.64,
+      "valor_dia_8h": 1242893.12
+    },
+    {
+      "codigo": "VQ DT",
+      "descripcion": "Volqueta Doble troque 14 m3",
+      "valor_hora": 224624.4,
+      "valor_dia_8h": 1796995.2
+    },
+    {
+      "codigo": "CARROT",
+      "descripcion": "Carrotanque o vehículo irrigador",
+      "valor_hora": 135762.34,
+      "valor_dia_8h": 1086098.72
+    },
+    {
+      "codigo": "CARG. FR",
+      "descripcion": "Cargador frontal tipo 930 o similar",
+      "valor_hora": 280472.29,
+      "valor_dia_8h": 2243778.32
+    },
+    {
+      "codigo": "COMP",
+      "descripcion": "Compresor con martillo",
+      "valor_hora": 150686.13,
+      "valor_dia_8h": 1205489.04
+    },
+    {
+      "codigo": "MINIC",
+      "descripcion": "Minicargador tipo Bocat",
+      "valor_hora": 159518.31,
+      "valor_dia_8h": 1276146.48
+    }
+  ]
+}

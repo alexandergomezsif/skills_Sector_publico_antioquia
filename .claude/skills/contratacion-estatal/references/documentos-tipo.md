@@ -6,7 +6,9 @@ versión vigente en colombiacompra.gov.co → Documentos Tipo, según la **fecha
 
 ## Sectores con documentos tipo (según conceptos de CCE de 2026)
 
-1. Infraestructura de transporte (obra, interventoría, consultoría).
+1. Infraestructura de transporte (obra, interventoría, consultoría): licitación de obra **v4 desde 3-feb-2025**;
+   mínima cuantía **v2 con modificaciones de la Res. 464, desde 3-feb-2025**; interventoría por concurso **v3**.
+   Detalle en `contratacion-obra-infraestructura.md`.
 2. Agua potable y saneamiento básico (obra, interventoría; versión 2 de obra de agua, saneamiento y
    estructuras hidráulicas: Resolución 546 del 14-sept-2026, con criterios del Decreto 0997 y 287 de 2026).
 3. Infraestructura social: licitación (incluida llave en mano), selección abreviada de menor cuantía,

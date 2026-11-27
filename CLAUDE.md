@@ -39,9 +39,14 @@ Léelo completo al iniciar una sesión. Corte de verificación del contenido: **
 | `contratacion-estatal` | Ciclo contractual completo (Ley 80/1993, Ley 1150/2007, Decreto 1082/2015 y reformas 2026), estudios previos, modalidades, riesgos, supervisión, liquidación, Ley de Garantías, emergencia 2026 |
 | `derecho-publico-colombiano` | Derechos de petición/PQRSD, actos administrativos, CPACA, disciplinario, régimen departamental, presupuesto, transparencia, conceptos jurídicos; cálculo de días hábiles |
 | `analisis-datos-excel` | Perfilar, limpiar y analizar tablas Excel/CSV con cifras: ejecución presupuestal, seguimiento contractual, indicadores del plan, metas físicas |
+| `secretaria-infraestructura-fisica` | Funcionamiento de la SIF: estructura y funciones oficiales por dependencia, estructuración de proyectos (MGA, BPIN, SGR), gestión predial, gestión social y ambiental, asuntos legales, proyectos y metas del Plan Vial, administración y finanzas, valorización, coordinación del Despacho |
+| `ingenieria-vial-obras` | Ingeniería civil e infraestructura vial: normas INVIAS/MinTransporte, malla vial ArcGIS R10 (consulta por código o municipio), puentes (CCP-14, SIPUCOL 2.0), pavimentos, placa huella, drenaje, taludes, mantenimiento, emergencias viales, puntos críticos, frentes y maquinaria amarilla |
 
 Las skills combinan: un informe de supervisión usa `contratacion-estatal` + `informes-institucionales`
-+ `marca-gobernacion`; un tablero de ejecución usa `analisis-datos-excel` + `presentaciones-institucionales`.
++ `marca-gobernacion`; un tablero de ejecución usa `analisis-datos-excel` + `presentaciones-institucionales`;
+un informe de frentes o de visita técnica usa `ingenieria-vial-obras` + `analisis-datos-excel` + `informes-institucionales`;
+los estudios previos de una obra vial usan `contratacion-estatal` + `ingenieria-vial-obras` + `secretaria-infraestructura-fisica`
+(lista de maduración); cualquier tarea de una dependencia de la SIF empieza por `secretaria-infraestructura-fisica`.
 
 ## 3. Datos institucionales clave (verificados a nov. 2026)
 
@@ -81,6 +86,14 @@ Las skills combinan: un informe de supervisión usa `contratacion-estatal` + `in
 5. **Documentos Tipo:** versiones nuevas de infraestructura social obligatorias desde el 16 de feb. de 2026;
    agua y saneamiento versión 2 (Resolución 546 de 2026). Siempre consultar la versión vigente en CCE.
 
+6. **Infraestructura vial 2026:** SIPUCOL 2.0 (Res. MinTransporte 20263040023605 de 2026, derogó la 1528 de
+   2017); Manual de Señalización Vial 2024 obligatorio desde el 1-abr-2025; inspección de puentes, muros y
+   taludes tras el sismo del 10-ago-2026. Ver `.claude/skills/ingenieria-vial-obras/references/normativa-tecnica-vial.md`.
+7. **Documentos Tipo de infraestructura de transporte:** licitación de obra versión 4 (desde el 3-feb-2025),
+   mínima cuantía versión 2 con modificaciones de la Resolución 464 (desde el 3-feb-2025), interventoría por
+   concurso versión 3. Valorización departamental: Ordenanza 46 de 2022 modificada por Ordenanza 22 de 2024.
+   Ver `.claude/skills/contratacion-estatal/references/contratacion-obra-infraestructura.md`.
+
 ## 5. Cómo responder según el tipo de tarea
 
 - **Pregunta jurídica o contractual:** hechos → norma aplicable (verificada) → análisis → riesgos →
@@ -90,6 +103,12 @@ Las skills combinan: un informe de supervisión usa `contratacion-estatal` + `in
   Nunca inventes cifras, números de contrato, radicados ni nombres.
 - **Análisis de Excel:** ejecuta `perfilar_excel.py` primero; reporta calidad de datos antes de concluir.
 - **Presentación:** guion primero (título-mensaje por diapositiva), luego `crear_presentacion.py`.
+- **Tarea de una dependencia de la SIF:** ubica la dependencia y su función en
+  `secretaria-infraestructura-fisica` → referencia del área → skills técnica, contractual o jurídica.
+  Datos de contratos actuales: `consultar_secop.py` (SECOP II, datos abiertos).
+- **Pregunta técnica de vías u obras:** identifica la vía en la malla R10 (`consultar_red_vial.py`) → competencia
+  → tipo de intervención → norma técnica vigente → criterio técnico → recomendación. Sin valores de diseño
+  inventados; los diseños los firma un ingeniero matriculado.
 
 ## 6. Mantenimiento
 

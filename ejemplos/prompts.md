@@ -29,6 +29,25 @@ Copie, ajuste y adjunte los archivos que correspondan. Claude usará las skills 
 - "Con el exporte de SECOP II adjunto, resume la contratación 2026 por modalidad y estado, y grafica."
 - "Calcula el avance de metas del plan de acción adjunto y señala los indicadores en riesgo."
 
+## Ingeniería vial y obras
+- "¿De quién es la vía 05282VT28, cuánto mide y qué superficie tiene?"
+- "Dame el inventario de vías terciarias de Fredonia por superficie y estado, en Excel."
+- "Con el Excel de frentes de esta semana y el de la anterior, haz el informe semanal de frentes y maquinaria."
+- "Redacta el informe de visita técnica de la pérdida de banca en el K8+300 de la vía [ ], con estas fotos."
+- "¿Cuánto cuesta un frente de 10 días con motoniveladora, vibrocompactador, retro y dos doble troque?"
+- "¿Qué especificación INVIAS y qué controles de calidad aplican a una placa huella?"
+- "Prepara la ficha de inspección post-sismo para los puentes de la vía [ ]."
+
+## Secretaría de Infraestructura Física (por dependencia)
+- "¿Qué dirección de la SIF debe responder una solicitud sobre la compra de una franja de un predio para la vía [ ]?"
+- "Haz la lista de maduración del proceso de mejoramiento del corredor [código] antes de radicarlo."
+- "Redacta la oferta formal de compra (borrador) para el predio de la ficha adjunta."
+- "¿Este mejoramiento de vía requiere licencia ambiental o basta el PAGA? ¿Qué permisos necesito?"
+- "Resume cuántos contratos de obra e interventoría ha firmado el Departamento en 2026 según SECOP II."
+- "Prepara la exposición de motivos de una ordenanza para decretar una obra por valorización."
+- "Arma el tablero mensual de la SIF: metas del Plan Vial, ejecución presupuestal y contratos críticos."
+- "¿Es obligatorio el patrimonio autónomo para el anticipo de este contrato de obra de menor cuantía?"
+
 ## Marca
 - "Revisa esta pieza: ¿cumple el manual de identidad visual?"
 - "Dame la paleta en CSS para el tablero de la dependencia."
