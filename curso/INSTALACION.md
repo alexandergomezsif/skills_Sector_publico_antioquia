@@ -14,7 +14,10 @@ Versión 3.0, piloto (nov. 2026). Desarrollado por: **Alexander Gómez Avendaño
 - **Inscripción con aprobación de la coordinación** (implementación versión 4, 27-nov-2026):
   1. La persona escribe cédula, nombre, correo, dependencia y vinculación. Queda **pendiente** en la pestaña Inscritos.
   2. Al correo de la cuenta dueña del script llega "Inscripción al curso: [nombre]" con los botones **Aprobar** y
-     **Rechazar**. Cada botón abre una página que pide confirmar (evita aprobaciones accidentales). Los enlaces llevan
+     **Rechazar**. Cada botón abre la página del curso (`#/coordinacion/...`), que muestra los datos y pide confirmar.
+     No se usa una página del propio script porque Google la bloquea ("No se pudo abrir el archivo") cuando el
+     navegador tiene varias cuentas de Google abiertas. Para reenviar avisos pendientes: ejecute
+     `reenviarAvisosPendientes` en el editor. Los enlaces llevan
      una firma HMAC (`SECRETO_FIRMA` en Propiedades del script, se crea sola); si se alteran, no funcionan.
   3. Al aprobar, la persona recibe el correo de bienvenida con el botón **Entrar al curso**: un enlace personal
      (`#/acceso/<cédula>/<token>`) que abre el curso ya identificado. No hay códigos que copiar.
