@@ -310,22 +310,33 @@ footer .wrap{max-width:none;padding:22px clamp(16px,3.4vw,48px)}
 <div class="overlay" id="login" hidden>
 <form class="login" id="loginForm" novalidate>
 <h2>Ingreso al aula virtual</h2>
-<p class="meta">Se ingresa con la cédula, sin contraseña. La cédula identifica su avance y su calificación; no es un mecanismo de seguridad.</p>
+<p class="meta">Ingrese con su cédula y su correo. La primera vez (y cuando cambie de equipo) le enviaremos un código de verificación al correo.</p>
 <label for="lCed">Número de cédula</label>
 <input id="lCed" inputmode="numeric" autocomplete="off" maxlength="12" placeholder="Solo números">
 <label for="lNom">Nombres y apellidos</label>
 <input id="lNom" autocomplete="name">
+<label for="lMail">Correo electrónico</label>
+<input id="lMail" type="email" autocomplete="email" placeholder="nombre@antioquia.gov.co">
 <div class="row2">
 <div><label for="lDep">Dependencia</label><input id="lDep" list="deps" placeholder="Secretaría o dirección"></div>
 <div><label for="lVin">Vinculación</label><select id="lVin"><option value="">Seleccione</option><option>Carrera administrativa</option><option>Provisional</option><option>Libre nombramiento y remoción</option><option>Temporal</option><option>Contratista</option><option>Otra</option></select></div>
 </div>
 <datalist id="deps"><option value="Secretaría de Infraestructura Física"><option value="SIF — Dirección de Desarrollo Físico"><option value="SIF — Dirección de Infraestructura y Apoyo Territorial"><option value="SIF — Dirección de Gestión Social, Ambiental y Predial"><option value="SIF — Dirección de Estructuración de Proyectos"><option value="SIF — Dirección de Instrumentos de Financiación"><option value="SIF — Dirección de Asuntos Legales"><option value="SIF — Dirección Administrativa y Financiera"><option value="Secretaría General"><option value="Secretaría de Hacienda"><option value="Departamento Administrativo de Planeación"><option value="Otra dependencia"></datalist>
 <div class="aviso" id="aviso">
-<b>Autorización de tratamiento de datos personales (Ley 1581 de 2012).</b> Al ingresar autorizo el tratamiento de mi número de cédula, nombre, dependencia y vinculación, y de los resultados que obtenga en este curso, con la única finalidad de registrar mi avance, calcular mi nivel de apropiación y permitir a la coordinación del curso hacer seguimiento a la formación en contratación estatal. Los datos se guardan en este navegador y en un registro administrado por la coordinación del curso; no se publican ni se usan para otros fines. Puedo conocer, actualizar, rectificar y solicitar la supresión de mis datos ante la coordinación del curso y conforme a la política de tratamiento de datos de la Gobernación de Antioquia. La entrega de los datos es voluntaria.
+<b>Autorización de tratamiento de datos personales (Ley 1581 de 2012).</b> Al ingresar autorizo el tratamiento de mi número de cédula, nombre, correo electrónico, dependencia y vinculación, y de los resultados que obtenga en este curso, con la única finalidad de registrar mi avance, calcular mi nivel de apropiación y permitir a la coordinación del curso hacer seguimiento a la formación en contratación estatal. Los datos se guardan en este navegador y en un registro administrado por la coordinación del curso; no se publican ni se usan para otros fines. Puedo conocer, actualizar, rectificar y solicitar la supresión de mis datos ante la coordinación del curso y conforme a la política de tratamiento de datos de la Gobernación de Antioquia. La entrega de los datos es voluntaria.
 </div>
 <label class="consent"><input type="checkbox" id="lOk"><span>Leí y acepto la autorización de tratamiento de datos.</span></label>
 <div class="err" id="lErr" aria-live="polite"></div>
-<div class="done-row"><button class="btn" type="submit">Ingresar</button></div>
+<div class="done-row"><button class="btn" type="submit" id="lGo">Continuar</button></div>
+</form>
+<form class="login" id="codeForm" novalidate hidden>
+<h2>Verifique su correo</h2>
+<p id="codeTxt">Le enviamos un código de 6 dígitos.</p>
+<label for="lCode">Código de verificación</label>
+<input id="lCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" style="font-size:24px;letter-spacing:8px;text-align:center">
+<p class="meta">Revise también la carpeta de spam o correo no deseado. El código vence en 15 minutos.</p>
+<div class="err" id="cErr" aria-live="polite"></div>
+<div class="done-row"><button class="btn" type="submit" id="cGo">Verificar e ingresar</button><button class="btn alt" type="button" id="cRe">Reenviar código</button><button class="btn alt" type="button" id="cBack">Cambiar datos</button></div>
 </form>
 </div>
 
@@ -537,7 +548,7 @@ async function enviar(tipo,extra){
 if(!U)return;
 const r=resultado();
 const ev=Object.assign({tipo,fecha_cliente:new Date().toISOString(),version:CONFIG.VERSION,
-cedula:U.perfil.cedula,nombre:U.perfil.nombre,dependencia:U.perfil.dependencia,vinculacion:U.perfil.vinculacion,
+cedula:U.perfil.cedula,token:U.perfil.token||"",nombre:U.perfil.nombre,dependencia:U.perfil.dependencia,vinculacion:U.perfil.vinculacion,
 modulos:r.modulos,practica:r.P,casos:r.C,final:r.F,indice:r.I,nivel:r.nivel,areas:JSON.stringify(r.areas),intentos:U.finals.length,codigo:r.codigo},extra||{});
 const cola=ls.get("curso-ce-cola",[]);cola.push(ev);ls.set("curso-ce-cola",cola.slice(-200));
 await vaciar();
@@ -897,30 +908,69 @@ $("#menuBtn").addEventListener("click",()=>{const o=document.body.classList.togg
 $("#scrim").addEventListener("click",()=>{document.body.classList.remove("menuOpen");$("#menuBtn").setAttribute("aria-expanded","false")});
 
 /* ---------- ingreso ---------- */
-function abrirLogin(){$("#login").hidden=false;setTimeout(()=>$("#lCed").focus(),50)}
+function abrirLogin(){$("#login").hidden=false;$("#codeForm").hidden=true;$("#loginForm").hidden=false;setTimeout(()=>$("#lCed").focus(),50)}
 function pintarUsuario(){
 const ub=$("#userbar");
 if(!U){ub.innerHTML=`<button type="button" id="inBtn">Ingresar<span class="nm"> con cédula</span></button>`;$("#inBtn").addEventListener("click",abrirLogin);return}
 const ini=U.perfil.nombre.split(" ").filter(Boolean).slice(0,2).map(s=>s[0]).join("").toUpperCase();
-ub.innerHTML=`<span class="chip"><span class="av">${esc(ini)}</span><span class="nm">${esc(U.perfil.nombre)} · C.C. ${mask(U.perfil.cedula)}</span></span><span class="sync" id="sync"></span><button type="button" id="outBtn">Salir</button>`;
+ub.innerHTML=`<span class="chip"><span class="av">${esc(ini)}</span><span class="nm">${esc(U.perfil.nombre)} · C.C. ${mask(U.perfil.cedula)}${U.perfil.verificado?" · correo verificado ✓":""}</span></span><span class="sync" id="sync"></span><button type="button" id="outBtn">Salir</button>`;
 $("#outBtn").addEventListener("click",()=>{ls.del("curso-ce-actual");U=null;exam=null;pintarUsuario();location.hash="#/inicio";render();abrirLogin()});
 }
-$("#lCed").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"");const prev=ls.get(key(e.target.value),null);if(prev){$("#lNom").value=prev.perfil.nombre;$("#lDep").value=prev.perfil.dependencia;$("#lVin").value=prev.perfil.vinculacion}});
-$("#loginForm").addEventListener("submit",ev=>{
+$("#lCed").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"");const prev=ls.get(key(e.target.value),null);if(prev){$("#lNom").value=prev.perfil.nombre;$("#lDep").value=prev.perfil.dependencia;$("#lVin").value=prev.perfil.vinculacion;if(prev.perfil.correo)$("#lMail").value=prev.perfil.correo}});
+let pend=null; // datos del ingreso en espera de código
+async function llamar(datos){
+const url=endpoint();if(!url)throw new Error("sin registro");
+const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),25000);
+try{const r=await fetch(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(datos),signal:ctl.signal});return await r.json()}finally{clearTimeout(tm)}
+}
+function entrar(p,token){
+U=load(p.cedula)||{perfil:{},done:{},read:{},ref:{},prac:{},casos:{},orden:null,comp:null,finals:[]};
+U.perfil={cedula:p.cedula,nombre:p.nombre,correo:p.correo,dependencia:p.dependencia,vinculacion:p.vinculacion,token:token||U.perfil.token||"",verificado:!!(token||U.perfil.verificado),consentimiento:U.perfil.consentimiento||new Date().toISOString()};
+save();ls.set("curso-ce-actual",p.cedula);
+$("#login").hidden=true;$("#codeForm").hidden=true;$("#loginForm").hidden=false;pintarUsuario();render();enviar("ingreso");
+}
+async function pedirCodigo(){
+const err=pend.reenvio?$("#cErr"):$("#lErr");const btn=pend.reenvio?$("#cRe"):$("#lGo");
+btn.disabled=true;const txt=btn.textContent;btn.textContent="Enviando…";err.textContent="";
+try{const d=await llamar(Object.assign({accion:"registro"},pend.p));
+if(!d.ok){err.textContent=d.error||"No se pudo enviar el código.";return}
+$("#codeTxt").innerHTML=`Le enviamos un código de 6 dígitos a <b>${esc(d.enviado_a)}</b>.`+(d.otro?" Esta cédula ya tenía un correo verificado; el código se envió a ese correo. Si ya no lo usa, pida a la coordinación que lo actualice.":"");
+$("#loginForm").hidden=true;$("#codeForm").hidden=false;$("#lCode").value="";setTimeout(()=>$("#lCode").focus(),50);
+if(pend.reenvio)$("#cErr").textContent="Código reenviado.";
+}catch(e){err.textContent="No hay conexión con el registro del curso. Verifique su internet e intente de nuevo."}
+finally{btn.disabled=false;btn.textContent=txt}
+}
+$("#loginForm").addEventListener("submit",async ev=>{
 ev.preventDefault();
-const ced=$("#lCed").value.trim(),nom=$("#lNom").value.trim().replace(/\s+/g," "),dep=$("#lDep").value.trim(),vin=$("#lVin").value;
+const ced=$("#lCed").value.trim(),nom=$("#lNom").value.trim().replace(/\s+/g," "),mail=$("#lMail").value.trim().toLowerCase(),dep=$("#lDep").value.trim(),vin=$("#lVin").value;
 const err=$("#lErr");
 if(!/^\d{5,10}$/.test(ced))return err.textContent="Escriba la cédula solo con números (5 a 10 dígitos).";
 if(nom.length<5||!/\s/.test(nom))return err.textContent="Escriba nombres y apellidos.";
+if(!/^[^\s@<>"']{1,64}@[^\s@<>"']{1,190}\.[a-z]{2,}$/.test(mail))return err.textContent="Escriba un correo electrónico válido.";
 if(!dep)return err.textContent="Indique su dependencia.";
 if(!vin)return err.textContent="Seleccione su vinculación.";
 if(!$("#lOk").checked)return err.textContent="Debe aceptar la autorización de tratamiento de datos para continuar.";
 err.textContent="";
-U=load(ced)||{perfil:{},done:{},read:{},ref:{},prac:{},casos:{},orden:null,comp:null,finals:[]};
-U.perfil={cedula:ced,nombre:nom.slice(0,120),dependencia:dep.slice(0,120),vinculacion:vin,consentimiento:U.perfil.consentimiento||new Date().toISOString()};
-save();ls.set("curso-ce-actual",ced);
-$("#login").hidden=true;pintarUsuario();render();enviar("ingreso");
+const p={cedula:ced,nombre:nom.slice(0,120),correo:mail,dependencia:dep.slice(0,120),vinculacion:vin};
+const prev=ls.get(key(ced),null);
+if(!endpoint())return entrar(p,"");
+if(prev&&prev.perfil.token&&prev.perfil.correo===mail)return entrar(p,prev.perfil.token);
+pend={p,reenvio:false};await pedirCodigo();
 });
+$("#codeForm").addEventListener("submit",async ev=>{
+ev.preventDefault();
+const code=$("#lCode").value.replace(/\D/g,"");const err=$("#cErr");
+if(code.length!==6)return err.textContent="Escriba los 6 dígitos del código.";
+const b=$("#cGo");b.disabled=true;b.textContent="Verificando…";err.textContent="";
+try{const d=await llamar({accion:"confirmar",cedula:pend.p.cedula,codigo:code});
+if(!d.ok){err.textContent=d.error||"Código incorrecto.";return}
+entrar(pend.p,d.token);pend=null;
+}catch(e){err.textContent="No hay conexión con el registro del curso. Intente de nuevo."}
+finally{b.disabled=false;b.textContent="Verificar e ingresar"}
+});
+$("#lCode").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"").slice(0,6)});
+$("#cRe").addEventListener("click",()=>{if(pend){pend.reenvio=true;pedirCodigo()}});
+$("#cBack").addEventListener("click",()=>{$("#codeForm").hidden=true;$("#loginForm").hidden=false;$("#cErr").textContent=""});
 
 /* ---------- herramientas y glosario ---------- */
 function modalidad(){
@@ -957,10 +1007,10 @@ filas=Array.isArray(d.filas)?d.filas:[];msg.textContent=`${filas.length} partici
 catch(e){clearTimeout(tm);msg.textContent="No se pudo conectar con el registro. Revise la dirección y que el script esté publicado para \"Cualquiera\".";}
 });
 function pintarPanel(){
-const cols=[["cedula","Cédula"],["nombre","Nombre"],["dependencia","Dependencia"],["vinculacion","Vinculación"],["modulos","Módulos"],["practica","Práctica %"],["casos","Casos %"],["final","Final %"],["indice","Índice"],["nivel","Nivel"],["intentos","Intentos"],["codigo","Código"],["ultimo","Último registro"]];
+const cols=[["cedula","Cédula"],["nombre","Nombre"],["correo","Correo"],["estado","Inscripción"],["inscripcion","Fecha de inscripción"],["dependencia","Dependencia"],["vinculacion","Vinculación"],["modulos","Módulos"],["practica","Práctica %"],["casos","Casos %"],["final","Final %"],["indice","Índice"],["nivel","Nivel"],["intentos","Intentos"],["codigo","Código"],["ultimo","Último registro"]];
 const niveles=["Avanzado","Competente","En desarrollo","Inicial"];
 const cnt=niveles.map(n=>[n,filas.filter(f=>f.nivel===n).length]);
-$("#cOut").innerHTML=`<div class="kpis"><div><b>${filas.length}</b>participantes</div>${cnt.map(c=>`<div><b>${c[1]}</b>${c[0]}</div>`).join("")}</div>
+$("#cOut").innerHTML=`<div class="kpis"><div><b>${filas.length}</b>inscritos</div><div><b>${filas.filter(f=>f.estado==="verificado").length}</b>correo verificado</div>${cnt.map(c=>`<div><b>${c[1]}</b>${c[0]}</div>`).join("")}</div>
 <label for="cF">Filtrar</label><input id="cF" placeholder="Nombre, cédula, dependencia o nivel">
 <div class="done-row"><button class="btn alt" type="button" id="cCsv">Descargar CSV</button><button class="btn alt" type="button" id="cCopy">Copiar tabla</button></div>
 <div class="scroll"><table><thead><tr>${cols.map(c=>`<th>${c[1]}</th>`).join("")}</tr></thead><tbody id="cBody"></tbody></table></div>`;
