@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## [1.7.0] — 2026-11-27
+
+Curso de contratación estatal: **inscripción con aprobación de la coordinación** (versión piloto, en pruebas).
+- La persona se inscribe con cédula y correo; la coordinación recibe un correo con botones Aprobar y Rechazar
+  (enlaces firmados con HMAC y página de confirmación).
+- Al aprobar, la persona recibe la bienvenida con un enlace personal de entrada; se elimina el código de 6 dígitos.
+- Pestaña Inscritos con estados pendiente, aprobado y rechazado; panel de coordinación con aprobados y pendientes.
+- Funciones internas del script marcadas como privadas (`_`) para que no se puedan invocar desde fuera.
+
 ## [1.6.0] — 2026-11-27
 
 Curso de contratación estatal 3.0: **aula virtual**.

@@ -1,6 +1,6 @@
 # Curso de contratación estatal — instalación y administración
 
-Versión 2.1 (nov. 2026). Desarrollado por: **Alexander Gómez Avendaño**.
+Versión 3.0, piloto (nov. 2026). Desarrollado por: **Alexander Gómez Avendaño**.
 
 ## Estado actual (27-nov-2026)
 
@@ -11,10 +11,18 @@ Versión 2.1 (nov. 2026). Desarrollado por: **Alexander Gómez Avendaño**.
 - La clave del panel de coordinación la generó el propio script (`generarClaveCoordinador`). Consúltela en
   Apps Script > Configuración del proyecto > Propiedades del script > `CLAVE_COORDINADOR`. No la publique.
 - Curso en línea: https://alexandergomezsif.github.io/skills_Sector_publico_antioquia/curso/
-- Inscripción con correo verificado (versión 2 de la implementación, 27-nov-2026): la página pide un código de 6 dígitos
-  que el script envía por correo con un mensaje de bienvenida (MailApp, cupo aproximado de 100 correos al día en
-  Gmail gratuito). La pestaña **Inscritos** lista a cada persona con su estado (pendiente o verificado). Los eventos sin
-  token de sesión válido se rechazan.
+- **Inscripción con aprobación de la coordinación** (implementación versión 4, 27-nov-2026):
+  1. La persona escribe cédula, nombre, correo, dependencia y vinculación. Queda **pendiente** en la pestaña Inscritos.
+  2. Al correo de la cuenta dueña del script llega "Inscripción al curso: [nombre]" con los botones **Aprobar** y
+     **Rechazar**. Cada botón abre una página que pide confirmar (evita aprobaciones accidentales). Los enlaces llevan
+     una firma HMAC (`SECRETO_FIRMA` en Propiedades del script, se crea sola); si se alteran, no funcionan.
+  3. Al aprobar, la persona recibe el correo de bienvenida con el botón **Entrar al curso**: un enlace personal
+     (`#/acceso/<cédula>/<token>`) que abre el curso ya identificado. No hay códigos que copiar.
+  4. Si cambia de equipo, vuelve a escribir cédula y correo y le llega de nuevo su enlace (sin nueva aprobación).
+  5. Para que los avisos lleguen a otro correo: Propiedades del script > `CORREO_COORDINADOR`.
+  - Cupo: unos 100 correos al día (Gmail gratuito); cada inscripción usa 2. Los eventos sin token válido se rechazan.
+  - Rechazar a alguien ya aprobado le retira el acceso; su avance registrado se conserva.
+  - Nota técnica: Google reserva el parámetro `c` en las direcciones `/exec`; por eso el enlace usa `ced`.
 - Si cambia el código del script: Implementar > Administrar implementaciones > editar (lápiz) > Versión: Nueva versión >
   Implementar. La dirección no cambia.
 - Pendiente recomendado: pasar la hoja a una cuenta institucional de la Gobernación (Ley 1581 de 2012).

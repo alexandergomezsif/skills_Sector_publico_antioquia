@@ -310,7 +310,7 @@ footer .wrap{max-width:none;padding:22px clamp(16px,3.4vw,48px)}
 <div class="overlay" id="login" hidden>
 <form class="login" id="loginForm" novalidate>
 <h2>Ingreso al aula virtual</h2>
-<p class="meta">Ingrese con su cédula y su correo. La primera vez (y cuando cambie de equipo) le enviaremos un código de verificación al correo.</p>
+<p class="meta">Escriba sus datos para inscribirse. La coordinación del curso aprueba cada inscripción y le llega un correo con el botón <b>Entrar al curso</b>. Si ya está inscrito(a) y cambió de equipo, escriba los mismos datos y le enviamos de nuevo su enlace.</p>
 <label for="lCed">Número de cédula</label>
 <input id="lCed" inputmode="numeric" autocomplete="off" maxlength="12" placeholder="Solo números">
 <label for="lNom">Nombres y apellidos</label>
@@ -330,13 +330,11 @@ footer .wrap{max-width:none;padding:22px clamp(16px,3.4vw,48px)}
 <div class="done-row"><button class="btn" type="submit" id="lGo">Continuar</button></div>
 </form>
 <form class="login" id="codeForm" novalidate hidden>
-<h2>Verifique su correo</h2>
-<p id="codeTxt">Le enviamos un código de 6 dígitos.</p>
-<label for="lCode">Código de verificación</label>
-<input id="lCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" style="font-size:24px;letter-spacing:8px;text-align:center">
-<p class="meta">Revise también la carpeta de spam o correo no deseado. El código vence en 15 minutos.</p>
+<h2 id="mTit">Solicitud enviada</h2>
+<p id="codeTxt"></p>
+<p class="meta" id="mNota">Revise también la carpeta de spam o correo no deseado. Puede cerrar esta página: el enlace del correo lo trae de vuelta.</p>
 <div class="err" id="cErr" aria-live="polite"></div>
-<div class="done-row"><button class="btn" type="submit" id="cGo">Verificar e ingresar</button><button class="btn alt" type="button" id="cRe">Reenviar código</button><button class="btn alt" type="button" id="cBack">Cambiar datos</button></div>
+<div class="done-row"><button class="btn alt" type="button" id="cBack">Volver</button></div>
 </form>
 </div>
 
@@ -900,6 +898,7 @@ document.body.classList.remove("menuOpen");$("#menuBtn").setAttribute("aria-expa
 if(scroll!==false){scrollTo({top:0,behavior:"auto"});$("#main").focus({preventScroll:true})}
 }
 addEventListener("hashchange",()=>{
+if(/^#\/acceso\//.test(location.hash)){acceso();return}
 if(exam&&ruta().v!=="evaluacion"){
  if(exam.qs&&!exam.done){if(!confirm("¿Salir de la evaluación? Este intento no se guardará.")){history.replaceState(null,"","#/evaluacion");return}clearInterval(exam.tick)}
  exam=null}
@@ -913,11 +912,10 @@ function pintarUsuario(){
 const ub=$("#userbar");
 if(!U){ub.innerHTML=`<button type="button" id="inBtn">Ingresar<span class="nm"> con cédula</span></button>`;$("#inBtn").addEventListener("click",abrirLogin);return}
 const ini=U.perfil.nombre.split(" ").filter(Boolean).slice(0,2).map(s=>s[0]).join("").toUpperCase();
-ub.innerHTML=`<span class="chip"><span class="av">${esc(ini)}</span><span class="nm">${esc(U.perfil.nombre)} · C.C. ${mask(U.perfil.cedula)}${U.perfil.verificado?" · correo verificado ✓":""}</span></span><span class="sync" id="sync"></span><button type="button" id="outBtn">Salir</button>`;
+ub.innerHTML=`<span class="chip"><span class="av">${esc(ini)}</span><span class="nm">${esc(U.perfil.nombre)} · C.C. ${mask(U.perfil.cedula)}${U.perfil.verificado?" · inscripción aprobada ✓":""}</span></span><span class="sync" id="sync"></span><button type="button" id="outBtn">Salir</button>`;
 $("#outBtn").addEventListener("click",()=>{ls.del("curso-ce-actual");U=null;exam=null;pintarUsuario();location.hash="#/inicio";render();abrirLogin()});
 }
 $("#lCed").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"");const prev=ls.get(key(e.target.value),null);if(prev){$("#lNom").value=prev.perfil.nombre;$("#lDep").value=prev.perfil.dependencia;$("#lVin").value=prev.perfil.vinculacion;if(prev.perfil.correo)$("#lMail").value=prev.perfil.correo}});
-let pend=null; // datos del ingreso en espera de código
 async function llamar(datos){
 const url=endpoint();if(!url)throw new Error("sin registro");
 const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),25000);
@@ -929,17 +927,8 @@ U.perfil={cedula:p.cedula,nombre:p.nombre,correo:p.correo,dependencia:p.dependen
 save();ls.set("curso-ce-actual",p.cedula);
 $("#login").hidden=true;$("#codeForm").hidden=true;$("#loginForm").hidden=false;pintarUsuario();render();enviar("ingreso");
 }
-async function pedirCodigo(){
-const err=pend.reenvio?$("#cErr"):$("#lErr");const btn=pend.reenvio?$("#cRe"):$("#lGo");
-btn.disabled=true;const txt=btn.textContent;btn.textContent="Enviando…";err.textContent="";
-try{const d=await llamar(Object.assign({accion:"registro"},pend.p));
-if(!d.ok){err.textContent=d.error||"No se pudo enviar el código.";return}
-$("#codeTxt").innerHTML=`Le enviamos un código de 6 dígitos a <b>${esc(d.enviado_a)}</b>.`+(d.otro?" Esta cédula ya tenía un correo verificado; el código se envió a ese correo. Si ya no lo usa, pida a la coordinación que lo actualice.":"");
-$("#loginForm").hidden=true;$("#codeForm").hidden=false;$("#lCode").value="";setTimeout(()=>$("#lCode").focus(),50);
-if(pend.reenvio)$("#cErr").textContent="Código reenviado.";
-}catch(e){err.textContent="No hay conexión con el registro del curso. Verifique su internet e intente de nuevo."}
-finally{btn.disabled=false;btn.textContent=txt}
-}
+function aviso(tit,html,nota){$("#mTit").textContent=tit;$("#codeTxt").innerHTML=html;$("#mNota").hidden=!nota;$("#cErr").textContent="";
+$("#login").hidden=false;$("#loginForm").hidden=true;$("#codeForm").hidden=false}
 $("#loginForm").addEventListener("submit",async ev=>{
 ev.preventDefault();
 const ced=$("#lCed").value.trim(),nom=$("#lNom").value.trim().replace(/\s+/g," "),mail=$("#lMail").value.trim().toLowerCase(),dep=$("#lDep").value.trim(),vin=$("#lVin").value;
@@ -954,23 +943,27 @@ err.textContent="";
 const p={cedula:ced,nombre:nom.slice(0,120),correo:mail,dependencia:dep.slice(0,120),vinculacion:vin};
 const prev=ls.get(key(ced),null);
 if(!endpoint())return entrar(p,"");
-if(prev&&prev.perfil.token&&prev.perfil.correo===mail)return entrar(p,prev.perfil.token);
-pend={p,reenvio:false};await pedirCodigo();
+if(prev&&prev.perfil.token&&prev.perfil.correo===mail)return entrar(Object.assign({},prev.perfil,{nombre:p.nombre,dependencia:p.dependencia,vinculacion:p.vinculacion}),prev.perfil.token);
+const btn=$("#lGo");btn.disabled=true;btn.textContent="Enviando…";
+try{const d=await llamar(Object.assign({accion:"registro"},p));
+if(!d.ok){err.textContent=d.error||"No se pudo enviar la solicitud.";return}
+if(d.estado==="aprobado")aviso("Revise su correo",`Su inscripción ya está aprobada. Enviamos su enlace de entrada a <b>${esc(d.enviado_a)}</b>. Ábralo en este equipo con el botón <b>Entrar al curso</b>.`,true);
+else if(d.estado==="rechazado")aviso("Inscripción no aprobada","La coordinación del curso no aprobó esta inscripción. Si cree que es un error, comuníquese con la coordinación.",false);
+else aviso("Solicitud enviada",`Recibimos su inscripción. La coordinación del curso la revisará y, al aprobarla, le llegará un correo a <b>${esc(d.enviado_a)}</b> con el botón <b>Entrar al curso</b>.`,true);
+}catch(e){err.textContent="No hay conexión con el registro del curso. Verifique su internet e intente de nuevo."}
+finally{btn.disabled=false;btn.textContent="Continuar"}
 });
-$("#codeForm").addEventListener("submit",async ev=>{
-ev.preventDefault();
-const code=$("#lCode").value.replace(/\D/g,"");const err=$("#cErr");
-if(code.length!==6)return err.textContent="Escriba los 6 dígitos del código.";
-const b=$("#cGo");b.disabled=true;b.textContent="Verificando…";err.textContent="";
-try{const d=await llamar({accion:"confirmar",cedula:pend.p.cedula,codigo:code});
-if(!d.ok){err.textContent=d.error||"Código incorrecto.";return}
-entrar(pend.p,d.token);pend=null;
-}catch(e){err.textContent="No hay conexión con el registro del curso. Intente de nuevo."}
-finally{b.disabled=false;b.textContent="Verificar e ingresar"}
-});
-$("#lCode").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"").slice(0,6)});
-$("#cRe").addEventListener("click",()=>{if(pend){pend.reenvio=true;pedirCodigo()}});
 $("#cBack").addEventListener("click",()=>{$("#codeForm").hidden=true;$("#loginForm").hidden=false;$("#cErr").textContent=""});
+/* enlace personal del correo: #/acceso/<cedula>/<token> */
+async function acceso(){
+const m=location.hash.match(/^#\/acceso\/(\d{5,10})\/([0-9a-fA-F-]{20,60})$/);if(!m)return false;
+const ced=m[1],tok=m[2];history.replaceState(null,"","#/inicio");
+aviso("Abriendo el curso…","Estamos verificando su enlace de entrada.",false);
+try{const d=await llamar({accion:"entrar",cedula:ced,token:tok});
+if(!d.ok){aviso("Enlace no válido",esc(d.error||"El enlace no es válido.")+" Escriba su cédula y su correo para recibir uno nuevo.",false);return true}
+$("#lOk").checked=true;entrar(d.perfil,tok);
+}catch(e){aviso("Sin conexión","No pudimos verificar el enlace. Revise su internet y vuelva a abrir el botón del correo.",false)}
+return true}
 
 /* ---------- herramientas y glosario ---------- */
 function modalidad(){
@@ -1010,7 +1003,7 @@ function pintarPanel(){
 const cols=[["cedula","Cédula"],["nombre","Nombre"],["correo","Correo"],["estado","Inscripción"],["inscripcion","Fecha de inscripción"],["dependencia","Dependencia"],["vinculacion","Vinculación"],["modulos","Módulos"],["practica","Práctica %"],["casos","Casos %"],["final","Final %"],["indice","Índice"],["nivel","Nivel"],["intentos","Intentos"],["codigo","Código"],["ultimo","Último registro"]];
 const niveles=["Avanzado","Competente","En desarrollo","Inicial"];
 const cnt=niveles.map(n=>[n,filas.filter(f=>f.nivel===n).length]);
-$("#cOut").innerHTML=`<div class="kpis"><div><b>${filas.length}</b>inscritos</div><div><b>${filas.filter(f=>f.estado==="verificado").length}</b>correo verificado</div>${cnt.map(c=>`<div><b>${c[1]}</b>${c[0]}</div>`).join("")}</div>
+$("#cOut").innerHTML=`<div class="kpis"><div><b>${filas.length}</b>inscritos</div><div><b>${filas.filter(f=>f.estado==="aprobado"||f.estado==="verificado").length}</b>aprobados</div><div><b>${filas.filter(f=>f.estado==="pendiente").length}</b>pendientes</div>${cnt.map(c=>`<div><b>${c[1]}</b>${c[0]}</div>`).join("")}</div>
 <label for="cF">Filtrar</label><input id="cF" placeholder="Nombre, cédula, dependencia o nivel">
 <div class="done-row"><button class="btn alt" type="button" id="cCsv">Descargar CSV</button><button class="btn alt" type="button" id="cCopy">Copiar tabla</button></div>
 <div class="scroll"><table><thead><tr>${cols.map(c=>`<th>${c[1]}</th>`).join("")}</tr></thead><tbody id="cBody"></tbody></table></div>`;
@@ -1025,7 +1018,9 @@ $("#cCopy").addEventListener("click",async()=>{try{await navigator.clipboard.wri
 /* ---------- arranque ---------- */
 nuevoOrden();
 const actual=ls.get("curso-ce-actual","");
-if(actual&&load(actual)){pintarUsuario();render(false);vaciar()}
+const esAcceso=/^#\/acceso\//.test(location.hash);
+if(esAcceso){U=null;pintarUsuario();render(false);acceso()}
+else if(actual&&load(actual)){pintarUsuario();render(false);vaciar()}
 else{U=null;pintarUsuario();render(false);if(ruta().v!=="coordinador")abrirLogin()}
 }
 </script>
