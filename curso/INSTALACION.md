@@ -28,6 +28,12 @@ Versión 3.0, piloto (nov. 2026). Desarrollado por: **Alexander Gómez Avendaño
   - Nota técnica: Google reserva el parámetro `c` en las direcciones `/exec`; por eso el enlace usa `ced`.
 - Si cambia el código del script: Implementar > Administrar implementaciones > editar (lápiz) > Versión: Nueva versión >
   Implementar. La dirección no cambia.
+- **Consola de administración** (`admin.html`, implementación versión 6): https://alexandergomezsif.github.io/skills_Sector_publico_antioquia/curso/admin.html
+  Entra con la clave de coordinación (Propiedades del script › `CLAVE_COORDINADOR`); la clave viaja solo en el cuerpo
+  del POST y se borra al cerrar la pestaña. Funciones: aprobar o rechazar pendientes, ver inscritos y avance, reenviar
+  el enlace de entrada, retirar acceso, descargar CSV e invitar por correo (máx. 50 por envío; pestaña
+  **Invitaciones** en la hoja). Tras 20 claves erradas en una hora se bloquea el acceso durante una hora.
+  El panel de coordinación ya no está en la página de los estudiantes.
 - Pendiente recomendado: pasar la hoja a una cuenta institucional de la Gobernación (Ley 1581 de 2012).
  Página estática (`index.html`) publicada en GitHub Pages + registro de
 calificaciones en una hoja de Google mediante Apps Script.

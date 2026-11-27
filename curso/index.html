@@ -495,21 +495,6 @@ footer .wrap{max-width:none;padding:22px clamp(16px,3.4vw,48px)}
 </div>
 </div></section>
 
-<!-- ============ COORDINACIÓN ============ -->
-<section class="view panel" id="v-coordinador" hidden><div class="col" style="max-width:1200px">
-<div class="crumbs"><a href="#/inicio">Inicio</a> › Panel de la coordinación</div>
-<div class="card">
-<h1 style="font-size:clamp(26px,3.4vw,38px);color:var(--green-ink);margin:0 0 6px">Panel de la coordinación</h1>
-<p>Solo para quien administra el curso. Consulta el registro de Google Sheets con la clave de coordinación.</p>
-<div class="row2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(16em,1fr));gap:0 14px">
-<div><label for="cUrl">Dirección del registro (Apps Script)</label><input id="cUrl" placeholder="https://script.google.com/macros/s/…/exec"></div>
-<div><label for="cKey">Clave de coordinación</label><input id="cKey" type="password" autocomplete="off"></div>
-</div>
-<div class="done-row"><button class="btn" id="cLoad" type="button">Cargar resultados</button><span id="cMsg" aria-live="polite"></span></div>
-<div id="cOut"></div>
-</div>
-</div></section>
-
 </main>
 </div>
 
@@ -517,7 +502,7 @@ footer .wrap{max-width:none;padding:22px clamp(16px,3.4vw,48px)}
 <p><b>Aviso.</b> Material de autoestudio elaborado con asistencia de IA a partir de normas verificadas a noviembre de 2026. No es un concepto jurídico ni reemplaza a la Secretaría General, a la Dirección de Asuntos Legales ni al Manual de Contratación del Departamento. Antes de decidir, verifique el texto vigente de cada norma en SUIN-Juriscol, Función Pública o la relatoría de Colombia Compra Eficiente.</p>
 <p><b>Fuentes principales:</b> Ley 80 de 1993; Ley 1150 de 2007; Ley 1474 de 2011; Ley 1882 de 2018; Ley 2022 de 2020; Ley 2195 de 2022; Ley 1952 de 2019; Ley 996 de 2005; Ley 1682 de 2013; Decreto 1082 de 2015 y Decretos 287 y 0997 de 2026; Decreto Legislativo 1420 de 2026; guías y conceptos de Colombia Compra Eficiente; Manual de Contratación del Departamento; datos abiertos de SECOP II.</p>
 <p class="autor">Desarrollado por: <b>Alexander Gómez Avendaño</b></p>
-<p>Gobernación de Antioquia · uso interno · versión 3.0 (nov. 2026) · <a href="#/coordinador">Panel de la coordinación</a></p>
+<p>Gobernación de Antioquia · uso interno · versión 3.0 (nov. 2026)</p>
 </div></footer>
 
 <script>
@@ -546,7 +531,7 @@ const num=s=>Number(String(s).replace(/[^\d]/g,""))||0;
 const pct=x=>Math.round(x*10)/10;
 const nf=x=>Number(x).toLocaleString("es-CO");
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
-const endpoint=()=>(ls.get("curso-ce-endpoint","")||CONFIG.ENDPOINT||"").startsWith("https://script.google.com/")?(ls.get("curso-ce-endpoint","")||CONFIG.ENDPOINT):"";
+const endpoint=()=>CONFIG.ENDPOINT.startsWith("https://script.google.com/")?CONFIG.ENDPOINT:"";
 const ICO_LOCK=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z"/></svg>`;
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -945,8 +930,7 @@ function ruta(){const h=location.hash.replace(/^#\/?/,"");const p=h.split("/");
 if(p[0]==="modulo"&&p[1])return {v:"modulo",id:p[1]};
 if(p[0]==="material")return {v:"material",id:p[1]||""};
 if(p[0]==="programa")return {v:"programa"};
-if(["taller","evaluacion","calificacion","recursos","coordinador","inicio"].includes(p[0]))return {v:p[0]};
-if(h==="coordinador")return {v:"coordinador"};
+if(["taller","evaluacion","calificacion","recursos","inicio"].includes(p[0]))return {v:p[0]};
 if(M.some(m=>m.id===h))return {v:"modulo",id:h};
 return {v:"inicio"}}
 function render(scroll){
@@ -1070,36 +1054,6 @@ function gl(){const q=$("#gq").value.trim().toLowerCase();const it=GLOS.filter(g
 $("#gl").innerHTML=it.length?it.map(g=>`<div><b>${g[0]}</b><br>${g[1]}</div>`).join(""):"<p>No hay términos con esa búsqueda.</p>"}
 $("#gq").addEventListener("input",gl);gl();
 
-/* ---------- panel de coordinación ---------- */
-$("#cUrl").value=endpoint();
-let filas=[];
-$("#cLoad").addEventListener("click",async()=>{
-const url=$("#cUrl").value.trim(),k=$("#cKey").value;const msg=$("#cMsg");
-if(!url.startsWith("https://script.google.com/"))return msg.textContent="La dirección debe ser la URL de la aplicación web de Apps Script (https://script.google.com/…/exec).";
-ls.set("curso-ce-endpoint",url);
-msg.textContent="Cargando…";
-const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),15000);
-try{const r=await fetch(url+"?accion=resumen&clave="+encodeURIComponent(k),{signal:ctl.signal});const d=await r.json();clearTimeout(tm);
-if(!d.ok)return msg.textContent="No autorizado o error: "+(d.error||"revise la clave");
-filas=Array.isArray(d.filas)?d.filas:[];msg.textContent=`${filas.length} participante(s). Actualizado: ${new Date().toLocaleString("es-CO")}`;pintarPanel();vaciar();}
-catch(e){clearTimeout(tm);msg.textContent="No se pudo conectar con el registro. Revise la dirección y que el script esté publicado para \"Cualquiera\".";}
-});
-function pintarPanel(){
-const cols=[["cedula","Cédula"],["nombre","Nombre"],["correo","Correo"],["estado","Inscripción"],["inscripcion","Fecha de inscripción"],["dependencia","Dependencia"],["vinculacion","Vinculación"],["modulos","Módulos"],["practica","Práctica %"],["casos","Casos %"],["final","Final %"],["indice","Índice"],["nivel","Nivel"],["intentos","Intentos"],["codigo","Código"],["ultimo","Último registro"]];
-const niveles=["Avanzado","Competente","En desarrollo","Inicial"];
-const cnt=niveles.map(n=>[n,filas.filter(f=>f.nivel===n).length]);
-$("#cOut").innerHTML=`<div class="kpis"><div><b>${filas.length}</b>inscritos</div><div><b>${filas.filter(f=>f.estado==="aprobado"||f.estado==="verificado").length}</b>aprobados</div><div><b>${filas.filter(f=>f.estado==="pendiente").length}</b>pendientes</div>${cnt.map(c=>`<div><b>${c[1]}</b>${c[0]}</div>`).join("")}</div>
-<label for="cF">Filtrar</label><input id="cF" placeholder="Nombre, cédula, dependencia o nivel">
-<div class="done-row"><button class="btn alt" type="button" id="cCsv">Descargar CSV</button><button class="btn alt" type="button" id="cCopy">Copiar tabla</button></div>
-<div class="scroll"><table><thead><tr>${cols.map(c=>`<th>${c[1]}</th>`).join("")}</tr></thead><tbody id="cBody"></tbody></table></div>`;
-const body=()=>{const q=$("#cF").value.toLowerCase();return filas.filter(f=>!q||cols.some(c=>String(f[c[0]]??"").toLowerCase().includes(q)))};
-const draw=()=>{$("#cBody").innerHTML=body().map(f=>`<tr>${cols.map(c=>`<td${["modulos","practica","casos","final","indice","intentos"].includes(c[0])?' class="n"':""}>${esc(f[c[0]])}</td>`).join("")}</tr>`).join("")};
-draw();$("#cF").addEventListener("input",draw);
-const csv=()=>[cols.map(c=>c[1]).join(";")].concat(body().map(f=>cols.map(c=>'"'+String(f[c[0]]??"").replace(/"/g,'""')+'"').join(";"))).join("\r\n");
-$("#cCsv").addEventListener("click",()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv()],{type:"text/csv"}));a.download="resultados-curso-contratacion.csv";document.body.append(a);a.click();a.remove()});
-$("#cCopy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(csv().replace(/;/g,"\t"));$("#cMsg").textContent="Tabla copiada."}catch(e){$("#cMsg").textContent="No se pudo copiar."}});
-}
-
 /* ---------- arranque ---------- */
 nuevoOrden();
 const actual=ls.get("curso-ce-actual","");
@@ -1107,7 +1061,7 @@ const esAcceso=/^#\/acceso\//.test(location.hash),esCoord=RX_COORD.test(location
 if(esAcceso){U=null;pintarUsuario();render(false);acceso()}
 else if(esCoord){if(actual&&load(actual)){pintarUsuario();vaciar()}else{U=null;pintarUsuario()}render(false);coordinacion()}
 else if(actual&&load(actual)){pintarUsuario();render(false);vaciar()}
-else{U=null;pintarUsuario();render(false);if(ruta().v!=="coordinador")abrirLogin()}
+else{U=null;pintarUsuario();render(false);abrirLogin()}
 }
 </script>
 </body>

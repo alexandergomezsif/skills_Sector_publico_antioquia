@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Administración · Curso de contratación estatal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+__CSS__
+body{background:var(--soft)}
+.top{position:sticky;top:0;z-index:20;background:var(--panel);border-bottom:1px solid var(--line)}
+.top .in{max-width:1240px;margin:auto;display:flex;align-items:center;gap:16px;padding:10px 20px;flex-wrap:wrap}
+.top img{height:44px;width:auto}.top .tt{flex:1;min-width:200px}.top .tt b{display:block;color:var(--green-ink);font-size:17px}.top .tt span{font-size:13px;color:var(--ink2)}
+.top .acc{display:flex;gap:8px;flex-wrap:wrap}
+.wrapA{max-width:1240px;margin:auto;padding:20px}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.kp div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.kp b{display:block;font-size:28px;color:var(--green-ink);line-height:1.1}.kp span{font-size:13px;color:var(--ink2)}
+.kp .alerta b{color:#b45309}
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:16px;flex-wrap:wrap}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font:inherit;font-weight:600;color:var(--ink2);cursor:pointer}
+.tabs button[aria-selected=true]{color:var(--green-ink);border-bottom-color:var(--green)}
+.tabs .n{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:10px;background:#b45309;color:#fff;font-size:12px}
+.pane{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.pend{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.pend .d{flex:1;min-width:240px}.pend .d b{font-size:16px}.pend .d div{font-size:14px;color:var(--ink2)}
+.pend .b{display:flex;gap:8px}
+.btn.red{background:#9b2c2c}.btn.sm{padding:6px 12px;font-size:13px}
+.filt{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:12px}.filt>div{flex:1;min-width:200px}.filt select,.filt input{width:100%}
+table.adm{width:100%;border-collapse:collapse;font-size:14px}
+table.adm th{position:sticky;top:0;background:var(--soft);text-align:left;font-weight:600;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.adm td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+table.adm td.n{text-align:right;white-space:nowrap}
+.est{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600}
+.est.aprobado,.est.verificado{background:#dcf3e5;color:#0b5640}.est.pendiente{background:#fdecd2;color:#8a4b06}.est.rechazado{background:#f6dcdc;color:#8b2323}
+.msg{min-height:1.4em;font-size:14px;margin:8px 0}.msg.ok{color:var(--green-ink)}.msg.no{color:#9b2c2c}
+textarea{width:100%;min-height:130px;font:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink)}
+.login{max-width:420px;margin:12vh auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px}
+.login img{height:52px}.vacio{color:var(--ink2);padding:20px 0}
+@media(max-width:700px){.top{position:static}.top img{height:36px}.kp{grid-template-columns:repeat(2,minmax(0,1fr))}.kp b{font-size:22px}.wrapA{padding:12px}.pane{padding:14px}table.adm{font-size:13px}}
+</style>
+</head>
+<body>
+
+<div id="vLogin" class="login">
+<img src="data:image/png;base64,__ESCUDO__" alt="Escudo de Antioquia">
+<h1 style="font-size:24px;color:var(--green-ink);margin:14px 0 4px">Consola de administración</h1>
+<p class="meta">Curso de contratación estatal. Solo para la coordinación del curso.</p>
+<form id="fLogin" autocomplete="off">
+<label for="clave">Clave de coordinación</label>
+<input id="clave" type="password" autocomplete="off" required>
+<div class="msg no" id="lMsg" aria-live="polite"></div>
+<button class="btn" type="submit" id="lBtn">Entrar</button>
+</form>
+<p class="meta" style="margin-top:16px">La clave está en Apps Script › Configuración del proyecto › Propiedades del script › CLAVE_COORDINADOR. No la comparta.</p>
+</div>
+
+<div id="vApp" hidden>
+<header class="top"><div class="in">
+<img src="data:image/png;base64,__ESCUDO__" alt="Escudo de Antioquia">
+<div class="tt"><b>Consola de administración</b><span>Curso de contratación estatal · <span id="act">sin cargar</span></span></div>
+<div class="acc"><button class="btn alt sm" type="button" id="bRef">Actualizar</button><a class="btn alt sm" href="./" target="_blank" rel="noopener">Ver el curso</a><button class="btn alt sm" type="button" id="bOut">Salir</button></div>
+</div></header>
+
+<main class="wrapA">
+<div class="kp" id="kpis"></div>
+<div class="tabs" role="tablist">
+<button role="tab" aria-selected="true" data-t="pend" id="tPend">Pendientes por aprobar</button>
+<button role="tab" aria-selected="false" data-t="ins">Inscritos y avance</button>
+<button role="tab" aria-selected="false" data-t="inv">Invitar</button>
+</div>
+
+<section class="pane" id="p-pend"></section>
+
+<section class="pane" id="p-ins" hidden>
+<div class="filt">
+<div><label for="q">Buscar</label><input id="q" placeholder="Nombre, cédula, correo o dependencia"></div>
+<div style="max-width:220px"><label for="fe">Estado</label><select id="fe"><option value="">Todos</option><option value="aprobado">Aprobados</option><option value="pendiente">Pendientes</option><option value="rechazado">Rechazados</option></select></div>
+<div style="max-width:200px;flex:0"><button class="btn alt" type="button" id="bCsv">Descargar CSV</button></div>
+</div>
+<div class="msg" id="iMsg" aria-live="polite"></div>
+<div class="scroll"><table class="adm"><thead><tr><th>Nombre</th><th>Cédula</th><th>Correo</th><th>Dependencia</th><th>Estado</th><th>Inscripción</th><th>Módulos</th><th>Índice</th><th>Nivel</th><th>Último ingreso</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
+</section>
+
+<section class="pane" id="p-inv" hidden>
+<h2 style="margin-top:0;font-size:20px;color:var(--green-ink)">Invitar al curso</h2>
+<p>Escriba o pegue los correos, separados por coma, punto y coma o en líneas distintas. Cada persona recibe un correo con el enlace al curso y la guía de inscripción. Se envía desde la cuenta dueña del registro.</p>
+<label for="ta">Correos</label>
+<textarea id="ta" placeholder="nombre.apellido@antioquia.gov.co&#10;otro.correo@gmail.com"></textarea>
+<div class="meta" id="taInfo">0 correos válidos</div>
+<div class="msg" id="vMsg" aria-live="polite"></div>
+<button class="btn" type="button" id="bInv">Enviar invitaciones</button>
+<h3 style="margin-top:26px">Invitaciones enviadas</h3>
+<div class="scroll"><table class="adm"><thead><tr><th>Fecha</th><th>Correo</th><th>¿Se inscribió?</th></tr></thead><tbody id="tbInv"></tbody></table></div>
+</section>
+<p class="meta" style="margin-top:18px">Datos personales tratados conforme a la Ley 1581 de 2012. Descargue y comparta los reportes solo con quien deba conocerlos. Desarrollado por: Alexander Gómez Avendaño.</p>
+</main>
+</div>
+
+<script>
+"use strict";
+const ENDPOINT="__ENDPOINT__",NMOD=__NMOD__;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const RX_MAIL=/^[^\s@<>"']{1,64}@[^\s@<>"']{1,190}\.[a-z]{2,}$/;
+let CLAVE="",D={filas:[],invitaciones:[],cupo:0};
+try{CLAVE=sessionStorage.getItem("curso-ce-adm")||""}catch(e){}
+
+async function api(op,extra){
+const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),45000);
+try{const r=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({accion:"admin",clave:CLAVE,op},extra||{})),signal:ctl.signal});return await r.json()}
+finally{clearTimeout(tm)}}
+
+async function cargar(){
+$("#act").textContent="cargando…";
+try{const d=await api("resumen");
+ if(!d.ok){if(/Clave/.test(d.error||""))return salir(d.error);$("#act").textContent=d.error;return}
+ D=d;$("#act").textContent="actualizado "+new Date().toLocaleTimeString("es-CO",{hour:"2-digit",minute:"2-digit"});pintar()}
+catch(e){$("#act").textContent="sin conexión con el registro"}}
+
+const activo=f=>f.estado==="aprobado"||f.estado==="verificado";
+function pintar(){
+const F=D.filas,pend=F.filter(f=>f.estado==="pendiente");
+const term=F.filter(f=>Number(f.intentos)>0).length,cons=F.filter(f=>f.nivel==="Competente"||f.nivel==="Avanzado").length;
+const prom=F.filter(activo).length?Math.round(F.filter(activo).reduce((a,f)=>a+Number(f.modulos||0),0)/F.filter(activo).length*10)/10:0;
+$("#kpis").innerHTML=[[F.length,"inscritos"],[pend.length,"pendientes por aprobar",pend.length>0],[F.filter(activo).length,"aprobados"],
+ [prom.toLocaleString("es-CO")+" / "+NMOD,"módulos promedio (aprobados)"],[term,"presentaron la evaluación final"],[cons,"con constancia"],[D.cupo,"correos disponibles hoy",D.cupo<10]]
+ .map(k=>`<div class="${k[2]?"alerta":""}"><b>${k[0]}</b><span>${k[1]}</span></div>`).join("");
+$("#tPend").innerHTML=`Pendientes por aprobar${pend.length?`<span class="n">${pend.length}</span>`:""}`;
+$("#p-pend").innerHTML=pend.length?pend.map(f=>`<div class="pend" data-ced="${esc(f.cedula)}"><div class="d"><b>${esc(f.nombre)}</b>
+<div>C.C. ${esc(f.cedula)} · ${esc(f.correo)}</div><div>${esc(f.dependencia)} · ${esc(f.vinculacion)} · inscrito ${esc(f.inscripcion)}</div><div class="msg"></div></div>
+<div class="b"><button class="btn sm" type="button" data-a="aprobar">Aprobar</button><button class="btn alt sm" type="button" data-a="rechazar">Rechazar</button></div></div>`).join("")
+ :`<p class="vacio">No hay inscripciones pendientes. Cuando alguien se inscriba también le llegará un correo con los botones para aprobar.</p>`;
+tabla();invit();}
+
+function filtradas(){const q=$("#q").value.trim().toLowerCase(),e=$("#fe").value;
+return D.filas.filter(f=>(!e||(e==="aprobado"?activo(f):f.estado===e))&&(!q||[f.nombre,f.cedula,f.correo,f.dependencia,f.nivel].join(" ").toLowerCase().includes(q)))}
+function tabla(){const L=filtradas();
+$("#tb").innerHTML=L.length?L.map(f=>`<tr data-ced="${esc(f.cedula)}"><td><b>${esc(f.nombre)}</b><div class="meta">${esc(f.vinculacion)}</div></td><td>${esc(f.cedula)}</td><td>${esc(f.correo)}</td><td>${esc(f.dependencia)}</td>
+<td><span class="est ${esc(f.estado)}">${f.estado==="verificado"?"aprobado":esc(f.estado)}</span></td><td>${esc(f.inscripcion)}</td>
+<td class="n">${Number(f.modulos||0)} / ${NMOD}</td><td class="n">${f.indice?Number(f.indice).toLocaleString("es-CO"):"—"}</td><td>${esc(f.nivel)||"—"}</td><td>${esc(f.ultimo)||"—"}</td>
+<td>${activo(f)?`<button class="btn alt sm" type="button" data-a="reenviar">Reenviar enlace</button> <button class="btn alt sm" type="button" data-a="rechazar">Retirar acceso</button>`:f.estado==="rechazado"||f.estado==="pendiente"?`<button class="btn sm" type="button" data-a="aprobar">Aprobar</button>`:""}</td></tr>`).join("")
+:`<tr><td colspan="11" class="vacio">Sin resultados.</td></tr>`}
+
+function invit(){const correos=new Set(D.filas.map(f=>String(f.correo).toLowerCase()));
+const L=(D.invitaciones||[]).slice().reverse();
+$("#tbInv").innerHTML=L.length?L.map(i=>`<tr><td>${esc(i.fecha)}</td><td>${esc(i.correo)}</td><td>${correos.has(String(i.correo).toLowerCase())?'<span class="est aprobado">Sí</span>':'<span class="meta">Aún no</span>'}</td></tr>`).join("")
+:`<tr><td colspan="3" class="vacio">Todavía no ha enviado invitaciones desde esta consola.</td></tr>`}
+
+async function accion(btn){const fila=btn.closest("[data-ced]"),ced=fila.dataset.ced,a=btn.dataset.a;
+const persona=D.filas.find(f=>String(f.cedula)===ced)||{};
+if(a==="rechazar"&&btn.dataset.ok!=="1"){btn.dataset.ok="1";btn.textContent=activo(persona)?"Confirmar retiro":"Confirmar rechazo";btn.classList.add("red");btn.classList.remove("alt");return}
+const out=fila.querySelector(".msg")||$("#iMsg");
+btn.disabled=true;const txt=btn.textContent;btn.textContent="Procesando…";
+try{const d=a==="reenviar"?await api("reenviar",{ced}):await api("decidir",{ced,a});
+ out.className="msg "+(d.ok?"ok":"no");out.textContent=d.ok?(d.texto||d.titulo):d.error;
+ if(d.ok&&a!=="reenviar")setTimeout(cargar,600)}
+catch(e){out.className="msg no";out.textContent="Sin conexión con el registro. Intente de nuevo."}
+finally{btn.disabled=false;btn.textContent=txt}}
+
+function correosTA(){return [...new Set($("#ta").value.split(/[\s,;]+/).map(s=>s.trim().toLowerCase()).filter(Boolean))]}
+$("#ta").addEventListener("input",()=>{const c=correosTA(),v=c.filter(x=>RX_MAIL.test(x)),m=c.length-v.length;
+$("#taInfo").textContent=`${v.length} correo(s) válido(s)`+(m?` · ${m} no válido(s): ${c.filter(x=>!RX_MAIL.test(x)).slice(0,3).join(", ")}`:"")+` · cupo de hoy: ${D.cupo}`});
+$("#bInv").addEventListener("click",async()=>{const v=correosTA().filter(x=>RX_MAIL.test(x)),m=$("#vMsg"),b=$("#bInv");
+if(!v.length){m.className="msg no";m.textContent="Escriba al menos un correo válido.";return}
+if(v.length>50){m.className="msg no";m.textContent="Máximo 50 correos por envío.";return}
+if(b.dataset.ok!=="1"){b.dataset.ok="1";b.textContent=`Confirmar envío a ${v.length} correo(s)`;m.className="msg";m.textContent="Revise la lista y confirme.";return}
+b.disabled=true;b.textContent="Enviando…";
+try{const d=await api("invitar",{correos:v});
+ if(!d.ok){m.className="msg no";m.textContent=d.error}
+ else{m.className="msg "+(d.errores.length?"no":"ok");m.textContent=`Enviadas: ${d.enviados.length}.`+(d.errores.length?` No enviadas: ${d.errores.join("; ")}.`:"")+` Cupo restante hoy: ${d.cupo}.`;
+  if(d.enviados.length)$("#ta").value=d.errores.map(e=>e.split(" ")[0]).join("\n");setTimeout(cargar,400)}}
+catch(e){m.className="msg no";m.textContent="Sin conexión con el registro. Intente de nuevo."}
+finally{b.disabled=false;b.dataset.ok="";b.textContent="Enviar invitaciones"}});
+
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-a]");if(b)accion(b);
+const t=e.target.closest(".tabs button");if(t){document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===t)));
+["pend","ins","inv"].forEach(k=>$("#p-"+k).hidden=k!==t.dataset.t)}});
+$("#q").addEventListener("input",tabla);$("#fe").addEventListener("change",tabla);
+$("#bCsv").addEventListener("click",()=>{const C=[["nombre","Nombre"],["cedula","Cédula"],["correo","Correo"],["dependencia","Dependencia"],["vinculacion","Vinculación"],["estado","Estado"],["inscripcion","Inscripción"],["aprobacion","Aprobación"],["ingresos","Ingresos"],["modulos","Módulos"],["practica","Práctica %"],["casos","Taller %"],["final","Final %"],["indice","Índice"],["nivel","Nivel"],["intentos","Intentos"],["codigo","Código constancia"],["ultimo","Último registro"]];
+const csv=[C.map(c=>c[1]).join(";")].concat(filtradas().map(f=>C.map(c=>'"'+String(f[c[0]]??"").replace(/"/g,'""')+'"').join(";"))).join("\r\n");
+const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));a.download="inscritos-curso-contratacion-"+new Date().toISOString().slice(0,10)+".csv";a.click()});
+
+function entrarApp(){$("#vLogin").hidden=true;$("#vApp").hidden=false;cargar()}
+function salir(msg){CLAVE="";try{sessionStorage.removeItem("curso-ce-adm")}catch(e){}$("#vApp").hidden=true;$("#vLogin").hidden=false;$("#lMsg").textContent=msg||"";$("#clave").value=""}
+$("#fLogin").addEventListener("submit",async ev=>{ev.preventDefault();const b=$("#lBtn");CLAVE=$("#clave").value.trim();if(!CLAVE)return;
+b.disabled=true;b.textContent="Verificando…";$("#lMsg").textContent="";
+try{const d=await api("resumen");if(!d.ok){$("#lMsg").textContent=d.error;CLAVE="";return}
+ try{sessionStorage.setItem("curso-ce-adm",CLAVE)}catch(e){}D=d;$("#vLogin").hidden=true;$("#vApp").hidden=false;
+ $("#act").textContent="actualizado "+new Date().toLocaleTimeString("es-CO",{hour:"2-digit",minute:"2-digit"});pintar()}
+catch(e){$("#lMsg").textContent="Sin conexión con el registro.";CLAVE=""}
+finally{b.disabled=false;b.textContent="Entrar"}});
+$("#bOut").addEventListener("click",()=>salir());$("#bRef").addEventListener("click",cargar);
+if(CLAVE)entrarApp();
+</script>
+</body>
+</html>

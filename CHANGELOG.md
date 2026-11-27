@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## [1.9.0] — 2026-11-27
+
+Curso de contratación estatal: **consola de administración** (`curso/admin.html`) separada de la página de estudiantes.
+- Indicadores (inscritos, pendientes, aprobados, módulos promedio, evaluaciones, constancias, cupo de correo del día).
+- Pendientes con aprobar o rechazar en un clic; inscritos con búsqueda, filtro por estado, reenvío del enlace de entrada,
+  retiro de acceso y descarga CSV; invitaciones por correo con historial y cruce "¿se inscribió?".
+- Script: operaciones `accion=admin` autenticadas con la clave en el cuerpo del POST y freno a intentos fallidos; se
+  elimina la consulta del resumen por GET con la clave en la dirección.
+
 ## [1.8.0] — 2026-11-27
 
 Curso de contratación estatal: menú del aula ampliado solo con lo que se usa.

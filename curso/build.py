@@ -29,4 +29,7 @@ for k,v in {"__CSS__":css,"__ESCUDO__":esc,"__MODULOS__":J(mods),"__CASOS__":J(C
     t=t.replace(k,v)
 assert "__" not in t.replace("__proto__","") or True
 open(AQUI/'index.html','w',encoding='utf-8').write(t)
+a=open(AQUI/'fuente'/'admin.html',encoding='utf-8').read()
+for k,v in {"__CSS__":css,"__ESCUDO__":esc,"__ENDPOINT__":ENDPOINT,"__NMOD__":str(len(mods))}.items(): a=a.replace(k,v)
+open(AQUI/'admin.html','w',encoding='utf-8').write(a)
 print("ok",len(t),"preguntas modulos",sum(len(m["quiz"]) for m in mods),"casos",sum(len(c["q"]) for c in CASOS),"areas",areas)

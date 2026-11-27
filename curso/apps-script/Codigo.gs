@@ -7,6 +7,7 @@
  *   Inscritos  -> un renglón por persona: datos de inscripción y estado (pendiente, aprobado, rechazado)
  *   Registros  -> un renglón por evento (ingreso, módulo, taller, evaluación)
  *   Resumen    -> un renglón por persona (último estado y mejor resultado)
+ *   Invitaciones -> correos invitados desde la consola de administración (admin.html)
  *
  * Inscripción con aprobación de la coordinación:
  *   1. La persona escribe sus datos en la página (accion=registro). Queda "pendiente".
@@ -22,6 +23,7 @@
 var HOJA_INS = 'Inscritos';
 var HOJA_REG = 'Registros';
 var HOJA_RES = 'Resumen';
+var HOJA_INV = 'Invitaciones';
 var COLS_INS = ['cedula', 'nombre', 'correo', 'dependencia', 'vinculacion', 'estado', 'inscripcion',
   'aprobacion', 'ultimo_ingreso', 'ingresos', 'token'];
 var COLS_REG = ['recibido', 'tipo', 'cedula', 'nombre', 'dependencia', 'vinculacion', 'modulo',
@@ -62,6 +64,7 @@ function doPost(e) {
     if (d.accion === 'registro') return json_(registro_(d));
     if (d.accion === 'entrar') return json_(entrar_(d));
     if (d.accion === 'revisar' || d.accion === 'decidir') return json_(revisarPost_(d));
+    if (d.accion === 'admin') return json_(admin_(d));
     var ev = limpiar_(d);
     if (!ev) return json_({ ok: false, error: 'datos inválidos' });
     var ss = SpreadsheetApp.getActive();
@@ -275,29 +278,94 @@ function paginaRevisar_(p) {
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 
+/* ---------------- consola de administración (admin.html) ---------------- */
+
+/** Todas las operaciones exigen la clave de coordinación en el cuerpo del POST (nunca en la dirección). */
+function admin_(d) {
+  var cache = CacheService.getScriptCache();
+  var fallos = Number(cache.get('adm_fallos') || 0);
+  if (fallos >= 20) return { ok: false, error: 'Demasiados intentos con clave errada. Espere una hora.' };
+  var clave = PropertiesService.getScriptProperties().getProperty('CLAVE_COORDINADOR');
+  if (!clave || String(d.clave || '') !== clave) {
+    cache.put('adm_fallos', String(fallos + 1), 3600);
+    return { ok: false, error: 'Clave de coordinación incorrecta.' };
+  }
+  var ss = SpreadsheetApp.getActive();
+  if (d.op === 'resumen') {
+    var porCed = {};
+    tabla_(ss.getSheetByName(HOJA_RES)).forEach(function (r) { porCed[String(r.cedula)] = r; });
+    var filas = tabla_(ss.getSheetByName(HOJA_INS)).map(function (i) {
+      var r = porCed[String(i.cedula)] || {};
+      return { cedula: String(i.cedula), nombre: i.nombre, correo: i.correo, dependencia: i.dependencia,
+        vinculacion: i.vinculacion, estado: i.estado, inscripcion: i.inscripcion, aprobacion: i.aprobacion,
+        ingresos: i.ingresos || 0, modulos: r.modulos || 0, practica: r.practica || 0, casos: r.casos || 0,
+        final: r.final || 0, indice: r.indice || 0, nivel: r.nivel || '', intentos: r.intentos || 0,
+        codigo: r.codigo || '', ultimo: r.ultimo || i.ultimo_ingreso || '' };
+    });
+    var inv = ss.getSheetByName(HOJA_INV) ? tabla_(ss.getSheetByName(HOJA_INV)) : [];
+    return { ok: true, filas: filas, invitaciones: inv, cupo: MailApp.getRemainingDailyQuota() };
+  }
+  if (d.op === 'decidir') {
+    var ced = String(d.ced || '').replace(/\D/g, '');
+    var a = d.a === 'aprobar' ? 'aprobar' : d.a === 'rechazar' ? 'rechazar' : '';
+    if (!a || !/^\d{5,10}$/.test(ced)) return { ok: false, error: 'Datos inválidos.' };
+    if (a === 'aprobar' && MailApp.getRemainingDailyQuota() < 1) return { ok: false, error: 'Sin cupo de correo hoy.' };
+    var r = decidir_(ced, a);
+    return { ok: true, titulo: r.titulo, texto: r.texto };
+  }
+  if (d.op === 'reenviar') {
+    var ins = buscarInscrito_(ss, String(d.ced || '').replace(/\D/g, ''));
+    if (!ins || !activo_(ins.fila) || !ins.fila.token) return { ok: false, error: 'La persona no tiene una inscripción aprobada.' };
+    if (MailApp.getRemainingDailyQuota() < 1) return { ok: false, error: 'Sin cupo de correo hoy.' };
+    correoBienvenida_(ins.fila.correo, ins.fila.nombre, ins.fila.cedula, ins.fila.token, false);
+    return { ok: true, texto: 'Enlace de entrada reenviado a ' + enmascarar_(ins.fila.correo) + '.' };
+  }
+  if (d.op === 'invitar') {
+    var lista = (d.correos || []).map(function (c) { return String(c).trim().toLowerCase(); })
+      .filter(function (c, i, arr) { return c && arr.indexOf(c) === i; });
+    if (!lista.length) return { ok: false, error: 'Escriba al menos un correo.' };
+    if (lista.length > 50) return { ok: false, error: 'Máximo 50 correos por envío.' };
+    var cupo = MailApp.getRemainingDailyQuota();
+    var sh = ss.getSheetByName(HOJA_INV);
+    if (!sh) { sh = ss.insertSheet(HOJA_INV); sh.getRange(1, 1, 1, 2).setValues([['fecha', 'correo']]).setFontWeight('bold'); sh.setFrozenRows(1); }
+    var enviados = [], errores = [];
+    lista.forEach(function (c) {
+      if (!/^[^\s@<>"']{1,64}@[^\s@<>"']{1,190}\.[a-z]{2,}$/.test(c)) { errores.push(c + ' (correo no válido)'); return; }
+      if (enviados.length >= cupo - 2) { errores.push(c + ' (sin cupo de correo hoy)'); return; }
+      try { correoInvitacion_(c); sh.appendRow([new Date(), c]); enviados.push(c); }
+      catch (e) { errores.push(c + ' (' + String(e).slice(0, 80) + ')'); }
+    });
+    return { ok: true, enviados: enviados, errores: errores, cupo: MailApp.getRemainingDailyQuota() };
+  }
+  return { ok: false, error: 'Operación desconocida.' };
+}
+
+function correoInvitacion_(destino) {
+  var paso = function (t) { return '<li style="margin:6px 0">' + t + '</li>'; };
+  var html = marco_('Curso de contratación estatal desde cero',
+    '<p>Cordial saludo:</p>' +
+    '<p>Le invitamos a inscribirse en el <b>Curso de contratación estatal desde cero</b>, un curso virtual gratuito de formación interna para servidores y contratistas de la Gobernación de Antioquia. No necesita conocimientos previos ni ser abogado.</p>' +
+    '<p>Recorrerá la vida de un contrato público, desde la necesidad hasta la liquidación, en <b>15 módulos cortos</b> (unas 5 horas en total, a su propio ritmo), con un taller de casos y una evaluación final. Con nivel Competente o Avanzado obtiene una constancia con código de verificación.</p>' +
+    '<p>' + boton_(URL_CURSO, 'Ir al curso e inscribirme') + '</p>' +
+    '<h3 style="color:#0b5640;font-size:16px;margin:18px 0 6px">Cómo inscribirse (3 minutos)</h3><ol style="padding-left:20px;margin:0">' +
+    paso('Abra el enlace del botón verde, en computador o celular.') +
+    paso('En <b>Ingreso al aula virtual</b> escriba su cédula, nombres y apellidos, correo, dependencia y vinculación.') +
+    paso('Acepte la autorización de tratamiento de datos y pulse <b>Continuar</b>. Verá <b>Solicitud enviada</b>.') +
+    paso('Cuando la coordinación apruebe su inscripción le llegará el correo <b>Bienvenido(a) al Curso de contratación estatal</b>.') +
+    paso('En ese correo pulse <b>Entrar al curso</b> y empiece por el módulo 1.') + '</ol>' +
+    '<p style="font-size:13px;color:#5b6b64;margin-top:14px">Si el correo de bienvenida no aparece, revise la carpeta de spam. Si cambia de computador, ingrese de nuevo con su cédula y el mismo correo. Para dudas o comentarios, responda este correo.</p>');
+  var texto = 'Le invitamos a inscribirse en el Curso de contratación estatal desde cero (formación interna de la Gobernación de Antioquia).\n' +
+    'Inscripción: ' + URL_CURSO + '\n\nEscriba sus datos, acepte la autorización de datos y espere el correo de bienvenida con el botón Entrar al curso.';
+  MailApp.sendEmail({ to: destino, subject: 'Inscripción abierta: Curso de contratación estatal desde cero',
+    body: texto, htmlBody: html, name: NOMBRE_REMITENTE });
+}
+
 /* ---------------- panel y verificación de constancias ---------------- */
 
 function doGet(e) {
   var p = (e && e.parameter) || {};
   if (p.accion === 'revisar') return paginaRevisar_(p);
   if (p.accion === 'verificar') return verificar_(String(p.codigo || ''));
-  var clave = PropertiesService.getScriptProperties().getProperty('CLAVE_COORDINADOR');
-  if (!clave || p.clave !== clave) return json_({ ok: false, error: 'clave inválida' });
-  if (p.accion === 'resumen') {
-    var ss = SpreadsheetApp.getActive();
-    var res = tabla_(ss.getSheetByName(HOJA_RES));
-    var porCed = {};
-    res.forEach(function (r) { porCed[String(r.cedula)] = r; });
-    var filas = tabla_(ss.getSheetByName(HOJA_INS)).map(function (i) {
-      var r = porCed[String(i.cedula)] || {};
-      return { cedula: i.cedula, nombre: i.nombre, correo: i.correo, dependencia: i.dependencia,
-        vinculacion: i.vinculacion, estado: i.estado, inscripcion: i.inscripcion,
-        modulos: r.modulos || 0, practica: r.practica || 0, casos: r.casos || 0, final: r.final || 0,
-        indice: r.indice || 0, nivel: r.nivel || '', intentos: r.intentos || 0, codigo: r.codigo || '',
-        ultimo: r.ultimo || i.ultimo_ingreso || '' };
-    });
-    return json_({ ok: true, filas: filas });
-  }
   return json_({ ok: false, error: 'acción desconocida' });
 }
 
