@@ -1,6 +1,18 @@
 # Curso de contratación estatal — instalación y administración
 
-Versión 2.1 (nov. 2026). Desarrollado por: **Alexander Gómez Avendaño**. Página estática (`index.html`) publicada en GitHub Pages + registro de
+Versión 2.1 (nov. 2026). Desarrollado por: **Alexander Gómez Avendaño**.
+
+## Estado actual (27-nov-2026)
+
+- Registro en Google Sheets **instalado** en la cuenta del autor: hoja "Curso Contratación Estatal - Registro de
+  participantes", proyecto de Apps Script "Registro Curso Contratacion Estatal", implementación de app web con acceso
+  "Cualquiera".
+- La URL del script está en `endpoint.txt`; `build.py` la usa por defecto.
+- La clave del panel de coordinación la generó el propio script (`generarClaveCoordinador`). Consúltela en
+  Apps Script > Configuración del proyecto > Propiedades del script > `CLAVE_COORDINADOR`. No la publique.
+- Curso en línea: https://alexandergomezsif.github.io/skills_Sector_publico_antioquia/curso/
+- Pendiente recomendado: pasar la hoja a una cuenta institucional de la Gobernación (Ley 1581 de 2012).
+ Página estática (`index.html`) publicada en GitHub Pages + registro de
 calificaciones en una hoja de Google mediante Apps Script.
 
 ## 1. Crear el registro en Google Sheets (una sola vez, 10 minutos)

@@ -98,7 +98,7 @@ function limpiar(d) {
   var nro = function (x, max) { var n = Number(x); return isFinite(n) && n >= 0 && n <= max ? Math.round(n * 10) / 10 : ''; };
   return {
     tipo: d.tipo, cedula: ced, nombre: txt(d.nombre), dependencia: txt(d.dependencia),
-    vinculacion: txt(d.vinculacion, 40), modulo: txt(d.modulo, 10), modulos: nro(d.modulos, 14),
+    vinculacion: txt(d.vinculacion, 40), modulo: txt(d.modulo, 10), modulos: nro(d.modulos, 60),
     practica: nro(d.practica, 100), casos: nro(d.casos, 100), final: nro(d.final, 100),
     indice: nro(d.indice, 100), nivel: NIVELES.indexOf(d.nivel) >= 0 ? d.nivel : '',
     areas: txt(d.areas, 200), intentos: nro(d.intentos, 999), intento: nro(d.intento, 999),
@@ -135,4 +135,14 @@ function actualizarResumen(sh, ev) {
 
 function json(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
+}
+
+/** Genera una clave de coordinación aleatoria si aún no existe. No la muestra en el registro:
+ *  consúltela en Configuración del proyecto > Propiedades del script > CLAVE_COORDINADOR. */
+function generarClaveCoordinador() {
+  var props = PropertiesService.getScriptProperties();
+  if (props.getProperty('CLAVE_COORDINADOR')) { Logger.log('Ya existe una clave; no se cambió.'); return; }
+  var clave = Utilities.getUuid().replace(/-/g, '').slice(0, 20);
+  props.setProperty('CLAVE_COORDINADOR', clave);
+  Logger.log('Clave creada. Consúltela en Configuración del proyecto > Propiedades del script.');
 }

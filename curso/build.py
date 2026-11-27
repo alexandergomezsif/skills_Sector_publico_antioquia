@@ -5,7 +5,7 @@ sys.path.insert(0,str(AQUI/'fuente'))
 from contenido import GLOSARIO,PLAZOS
 from contenido2 import CASOS as CASOS_BASE,ORDEN_LICITACION
 from contenido3 import armar,CASOS_NUEVOS,COMPARATIVO,GLOSARIO_NUEVO,VERSION
-ENDPOINT=sys.argv[1] if len(sys.argv)>1 else ""
+ENDPOINT=sys.argv[1] if len(sys.argv)>1 else ((AQUI/"endpoint.txt").read_text().strip() if (AQUI/"endpoint.txt").exists() else "")
 mods=armar()
 CASOS=CASOS_BASE+CASOS_NUEVOS
 GLOS=sorted(GLOSARIO+GLOSARIO_NUEVO,key=lambda g:g[0].lower())
