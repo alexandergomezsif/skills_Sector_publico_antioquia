@@ -207,7 +207,7 @@ footer .wrap{max-width:none;padding:22px clamp(16px,3.4vw,48px)}
 <p id="codeTxt"></p>
 <p class="meta" id="mNota">Revise también la carpeta de spam o correo no deseado. Puede cerrar esta página: el enlace del correo lo trae de vuelta.</p>
 <div class="err" id="cErr" aria-live="polite"></div>
-<div class="done-row"><button class="btn alt" type="button" id="cBack">Volver</button></div>
+<div class="done-row"><button class="btn" type="button" id="mOk" hidden>Confirmar</button><button class="btn alt" type="button" id="cBack">Volver</button></div>
 </form>
 </div>
 
@@ -772,6 +772,7 @@ if(scroll!==false){scrollTo({top:0,behavior:"auto"});$("#main").focus({preventSc
 }
 addEventListener("hashchange",()=>{
 if(/^#\/acceso\//.test(location.hash)){acceso();return}
+if(RX_COORD.test(location.hash)){coordinacion();return}
 if(exam&&ruta().v!=="evaluacion"){
  if(exam.qs&&!exam.done){if(!confirm("¿Salir de la evaluación? Este intento no se guardará.")){history.replaceState(null,"","#/evaluacion");return}clearInterval(exam.tick)}
  exam=null}
@@ -800,7 +801,7 @@ U.perfil={cedula:p.cedula,nombre:p.nombre,correo:p.correo,dependencia:p.dependen
 save();ls.set("curso-ce-actual",p.cedula);
 $("#login").hidden=true;$("#codeForm").hidden=true;$("#loginForm").hidden=false;pintarUsuario();render();enviar("ingreso");
 }
-function aviso(tit,html,nota){$("#mTit").textContent=tit;$("#codeTxt").innerHTML=html;$("#mNota").hidden=!nota;$("#cErr").textContent="";
+function aviso(tit,html,nota){$("#mOk").hidden=true;$("#mTit").textContent=tit;$("#codeTxt").innerHTML=html;$("#mNota").hidden=!nota;$("#cErr").textContent="";
 $("#login").hidden=false;$("#loginForm").hidden=true;$("#codeForm").hidden=false}
 $("#loginForm").addEventListener("submit",async ev=>{
 ev.preventDefault();
@@ -826,7 +827,25 @@ else aviso("Solicitud enviada",`Recibimos su inscripción. La coordinación del 
 }catch(e){err.textContent="No hay conexión con el registro del curso. Verifique su internet e intente de nuevo."}
 finally{btn.disabled=false;btn.textContent="Continuar"}
 });
-$("#cBack").addEventListener("click",()=>{$("#codeForm").hidden=true;$("#loginForm").hidden=false;$("#cErr").textContent=""});
+$("#cBack").addEventListener("click",()=>{$("#codeForm").hidden=true;$("#loginForm").hidden=false;$("#cErr").textContent="";if(U)$("#login").hidden=true});
+/* botón Aprobar/Rechazar del correo de la coordinación: #/coordinacion/<accion>/<cedula>/<firma> */
+const RX_COORD=/^#\/coordinacion\/(aprobar|rechazar)\/(\d{5,10})\/([A-Za-z0-9_-]{20,80})$/;
+async function coordinacion(){
+const m=location.hash.match(RX_COORD);if(!m)return false;
+const q={a:m[1],ced:m[2],f:m[3]};history.replaceState(null,"","#/inicio");
+aviso("Revisando la inscripción…","Un momento.",false);
+try{const d=await llamar(Object.assign({accion:"revisar"},q));
+if(!d.ok){aviso("Enlace no válido",esc(d.error||""),false);return true}
+const p=d.persona,apr=q.a==="aprobar";
+aviso(apr?"¿Aprobar esta inscripción?":"¿Rechazar esta inscripción?",`<b>${esc(p.nombre)}</b><br>C.C. ${esc(p.cedula)} · ${esc(p.correo)}<br>${esc(p.dependencia)} · ${esc(p.vinculacion)}<br><span class="meta">Estado actual: ${esc(p.estado)}</span>`,false);
+const ok=$("#mOk");ok.hidden=false;ok.textContent=apr?"Confirmar aprobación":"Confirmar rechazo";
+ok.onclick=async()=>{ok.disabled=true;ok.textContent="Procesando…";
+ try{const r=await llamar(Object.assign({accion:"decidir"},q));
+ if(!r.ok)aviso("No se pudo completar",esc(r.error||""),false);else aviso(r.titulo,esc(r.texto),false)}
+ catch(e){$("#cErr").textContent="Sin conexión con el registro. Intente de nuevo."}
+ finally{ok.disabled=false}};
+}catch(e){aviso("Sin conexión","No pudimos consultar el registro. Revise su internet y vuelva a abrir el botón del correo.",false)}
+return true}
 /* enlace personal del correo: #/acceso/<cedula>/<token> */
 async function acceso(){
 const m=location.hash.match(/^#\/acceso\/(\d{5,10})\/([0-9a-fA-F-]{20,60})$/);if(!m)return false;
@@ -891,8 +910,9 @@ $("#cCopy").addEventListener("click",async()=>{try{await navigator.clipboard.wri
 /* ---------- arranque ---------- */
 nuevoOrden();
 const actual=ls.get("curso-ce-actual","");
-const esAcceso=/^#\/acceso\//.test(location.hash);
+const esAcceso=/^#\/acceso\//.test(location.hash),esCoord=RX_COORD.test(location.hash);
 if(esAcceso){U=null;pintarUsuario();render(false);acceso()}
+else if(esCoord){if(actual&&load(actual)){pintarUsuario();vaciar()}else{U=null;pintarUsuario()}render(false);coordinacion()}
 else if(actual&&load(actual)){pintarUsuario();render(false);vaciar()}
 else{U=null;pintarUsuario();render(false);if(ruta().v!=="coordinador")abrirLogin()}
 }

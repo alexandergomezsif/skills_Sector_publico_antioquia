@@ -61,6 +61,7 @@ function doPost(e) {
     var d = JSON.parse((e && e.postData && e.postData.contents) || '{}');
     if (d.accion === 'registro') return json_(registro_(d));
     if (d.accion === 'entrar') return json_(entrar_(d));
+    if (d.accion === 'revisar' || d.accion === 'decidir') return json_(revisarPost_(d));
     var ev = limpiar_(d);
     if (!ev) return json_({ ok: false, error: 'datos inválidos' });
     var ss = SpreadsheetApp.getActive();
@@ -144,6 +145,23 @@ function entrar_(d) {
     dependencia: f.dependencia, vinculacion: f.vinculacion } };
 }
 
+/** La coordinación abre el botón del correo en la página del curso (#/coordinacion/...).
+ *  Se usa la página del curso y no una página del script porque esta última falla cuando el navegador
+ *  tiene varias cuentas de Google abiertas (Google agrega /u/1/ a la dirección). */
+function revisarPost_(d) {
+  var ced = String(d.ced || '').replace(/\D/g, '');
+  var a = d.a === 'aprobar' ? 'aprobar' : d.a === 'rechazar' ? 'rechazar' : '';
+  if (!a || !/^\d{5,10}$/.test(ced) || String(d.f || '') !== firma_(ced, a)) {
+    return { ok: false, error: 'Enlace no válido. Use los botones del correo de inscripción, sin modificarlos.' };
+  }
+  if (d.accion === 'decidir') { var r = decidir_(ced, a); return { ok: true, titulo: r.titulo, texto: r.texto }; }
+  var ins = buscarInscrito_(SpreadsheetApp.getActive(), ced);
+  if (!ins) return { ok: false, error: 'No existe una inscripción con esa cédula.' };
+  var f = ins.fila;
+  return { ok: true, persona: { cedula: String(f.cedula), nombre: f.nombre, correo: f.correo,
+    dependencia: f.dependencia, vinculacion: f.vinculacion, estado: f.estado } };
+}
+
 /** Aprueba o rechaza una inscripción desde el enlace firmado del correo de la coordinación. */
 function decidir_(ced, accion) {
   var ss = SpreadsheetApp.getActive();
@@ -193,7 +211,7 @@ function boton_(url, texto, color) {
 }
 
 function correoCoordinacion_(p) {
-  var url = function (a) { return URL_REGISTRO + '?accion=revisar&a=' + a + '&ced=' + p.cedula + '&f=' + firma_(p.cedula, a); };
+  var url = function (a) { return URL_CURSO + '#/coordinacion/' + a + '/' + p.cedula + '/' + firma_(p.cedula, a); };
   var fila = function (k, v) { return '<tr><td style="padding:4px 12px 4px 0;color:#5b6b64">' + k + '</td><td style="padding:4px 0"><b>' + escapar_(v) + '</b></td></tr>'; };
   var html = marco_('Nueva inscripción al curso',
     '<p>Una persona pidió inscribirse al Curso de contratación estatal:</p>' +
@@ -396,3 +414,15 @@ function generarClaveCoordinador() {
   Logger.log('Clave creada. Consúltela en Configuración del proyecto > Propiedades del script.');
 }
 
+/** Reenvía el aviso a la coordinación de todas las inscripciones pendientes (ejecútela desde el editor). */
+function reenviarAvisosPendientes() {
+  var filas = tabla_(SpreadsheetApp.getActive().getSheetByName(HOJA_INS));
+  var n = 0;
+  filas.forEach(function (f) {
+    if (f.estado !== 'pendiente') return;
+    correoCoordinacion_({ cedula: String(f.cedula), nombre: f.nombre, correo: f.correo,
+      dependencia: f.dependencia, vinculacion: f.vinculacion });
+    n++;
+  });
+  Logger.log('Avisos reenviados: ' + n);
+}
